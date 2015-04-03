@@ -76,12 +76,12 @@ class ChatEntryViewController : UIViewController {
     
     @IBAction func FacebookLogin(sender: AnyObject) {
         
-        
+        println("facebook login is working")
         hideUI()
         
         SVProgressHUD.showWithStatus("Logging In")
         
-        PFFacebookUtils.logInWithPermissions(nil, {
+        PFFacebookUtils.logInWithPermissions(["email", "user_about_me"], {
             (user: PFUser!, error: NSError!) -> Void in
             
             if error != nil {
@@ -104,6 +104,8 @@ class ChatEntryViewController : UIViewController {
                             NSLog(error!.description);
                         } else if success {
                             self.performSegueWithIdentifier("login", sender: self);
+                            SVProgressHUD.dismiss()
+
                         }
                     })
                 

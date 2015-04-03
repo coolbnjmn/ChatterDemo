@@ -40,7 +40,7 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
     
     @IBOutlet weak var waitingLabel: UILabel!
     let subscribeToSelf = false
-    let apiKey = "45135932"
+    let apiKey = "45198012"
     var session : PFObject!
     
     var tokSession : OTSession? = nil
@@ -128,6 +128,7 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
         var error : OTError?
         
         let publisherToken = session["publisherToken"] as String
+        println(publisherToken)
         tokSession!.connectWithToken(publisherToken, error: &error)
         if error != nil {
             showAlert(error!.localizedDescription)

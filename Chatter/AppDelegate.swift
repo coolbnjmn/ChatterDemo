@@ -46,7 +46,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //Parse.enableLocalDatastore()    // https://parse.com/docs/ios_guide#localdatastore/iOS
         
         //This is Chatter's Production App ID
-        Parse.setApplicationId("", clientKey: "")
+        Parse.setApplicationId("wIIsTKzuVbqov5wrS6kEiXCoj1C2B47zgjG8wNfh", clientKey: "MJZsPH1YonccoJ4YiEWFtjw6TKYsotpxHPy7oXcb")
         
         //This is Chatter's Development App ID
         //Parse.setApplicationId("", clientKey: "")

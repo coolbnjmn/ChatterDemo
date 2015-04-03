@@ -1,0 +1,14 @@
+{
+    "applications": {
+        "Chatter": {
+            "applicationId": "wIIsTKzuVbqov5wrS6kEiXCoj1C2B47zgjG8wNfh", 
+            "masterKey": "4q6HvfKjcJ9zvrqiyWGhDbfWw4RAP3kqQs6kcGB1"
+        }, 
+        "_default": {
+            "link": "Chatter"
+        }
+    }, 
+    "global": {
+        "parseVersion": "1.3.3"
+    }
+}

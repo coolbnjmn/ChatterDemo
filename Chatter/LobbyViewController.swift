@@ -71,6 +71,7 @@ class LobbyViewController : UIViewController {
     
 
     @IBAction func openProfile(sender: AnyObject) {
+        performSegueWithIdentifier("showProfile", sender: sender)
     }
 
     

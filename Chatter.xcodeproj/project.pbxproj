@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		1AD33D0671AA7E5EFB86109C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DE334751A544E0231921831B /* libPods.a */; };
-		640CA6251A8BFF000089BCB5 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 640CA6231A8BFF000089BCB5 /* FacebookSDK.framework */; };
-		640CA6261A8BFF000089BCB5 /* FBAudienceNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 640CA6241A8BFF000089BCB5 /* FBAudienceNetwork.framework */; };
 		645282111A9B1FF0007C6A08 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645282101A9B1FF0007C6A08 /* ProfileViewController.swift */; };
 		645863A01A718A7E00551A0F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6458639F1A718A7E00551A0F /* AppDelegate.swift */; };
 		645863A51A718A7E00551A0F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 645863A31A718A7E00551A0F /* Main.storyboard */; };
@@ -102,6 +100,8 @@
 		64FC95481A8D8E49001137A5 /* PublisherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64FC95471A8D8E49001137A5 /* PublisherViewController.swift */; };
 		64FC954A1A8D8E7E001137A5 /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64FC95491A8D8E7E001137A5 /* UserViewController.swift */; };
 		64FC954C1A8EBEC5001137A5 /* LogoutSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64FC954B1A8EBEC5001137A5 /* LogoutSegue.swift */; };
+		B22176691AC49FBC00BB4401 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B22176671AC49FBC00BB4401 /* FacebookSDK.framework */; };
+		B221766C1AC4A05F00BB4401 /* FBAudienceNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B221766B1AC4A05F00BB4401 /* FBAudienceNetwork.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -117,8 +117,6 @@
 /* Begin PBXFileReference section */
 		640CA6201A8BFD360089BCB5 /* Chatter-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Chatter-Bridging-Header.h"; sourceTree = "<group>"; };
 		640CA6211A8BFEE30089BCB5 /* README.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = README.txt; path = ../../Documents/FacebookSDK/README.txt; sourceTree = "<group>"; };
-		640CA6231A8BFF000089BCB5 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../../Documents/FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
-		640CA6241A8BFF000089BCB5 /* FBAudienceNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBAudienceNetwork.framework; path = ../../Documents/FacebookSDK/FBAudienceNetwork.framework; sourceTree = "<group>"; };
 		645282101A9B1FF0007C6A08 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		6458639A1A718A7E00551A0F /* chatter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = chatter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6458639E1A718A7E00551A0F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -187,6 +185,8 @@
 		64FC95491A8D8E7E001137A5 /* UserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserViewController.swift; sourceTree = "<group>"; };
 		64FC954B1A8EBEC5001137A5 /* LogoutSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogoutSegue.swift; sourceTree = "<group>"; };
 		9EF3A3E1ACACE7A30FDB8204 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		B22176671AC49FBC00BB4401 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
+		B221766B1AC4A05F00BB4401 /* FBAudienceNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBAudienceNetwork.framework; sourceTree = "<group>"; };
 		DE334751A544E0231921831B /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3011BB4D2F5AD88CEA672A1 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -196,8 +196,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				640CA6251A8BFF000089BCB5 /* FacebookSDK.framework in Frameworks */,
-				640CA6261A8BFF000089BCB5 /* FBAudienceNetwork.framework in Frameworks */,
+				B221766C1AC4A05F00BB4401 /* FBAudienceNetwork.framework in Frameworks */,
+				B22176691AC49FBC00BB4401 /* FacebookSDK.framework in Frameworks */,
+				6487BB501A92944C00BE7D32 /* OpenTok.framework in Frameworks */,
 				645864661A73763B00551A0F /* libxml2.dylib in Frameworks */,
 				645864641A73762D00551A0F /* libpthread.dylib in Frameworks */,
 				645864611A73762300551A0F /* libstdc++.6.0.9.dylib in Frameworks */,
@@ -223,7 +224,6 @@
 				645863CF1A718C5500551A0F /* CoreGraphics.framework in Frameworks */,
 				645863CD1A718C4E00551A0F /* CFNetwork.framework in Frameworks */,
 				645863CB1A718C4600551A0F /* AudioToolbox.framework in Frameworks */,
-				6487BB501A92944C00BE7D32 /* OpenTok.framework in Frameworks */,
 				645863C61A718C1700551A0F /* Parse.framework in Frameworks */,
 				645863C71A718C1700551A0F /* ParseCrashReporting.framework in Frameworks */,
 				645863C91A718C1700551A0F /* ParseUI.framework in Frameworks */,
@@ -352,9 +352,9 @@
 		645863BF1A718BFE00551A0F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B221766B1AC4A05F00BB4401 /* FBAudienceNetwork.framework */,
+				B22176671AC49FBC00BB4401 /* FacebookSDK.framework */,
 				6487BB4F1A92944C00BE7D32 /* OpenTok.framework */,
-				640CA6231A8BFF000089BCB5 /* FacebookSDK.framework */,
-				640CA6241A8BFF000089BCB5 /* FBAudienceNetwork.framework */,
 				640CA6211A8BFEE30089BCB5 /* README.txt */,
 				645864651A73763B00551A0F /* libxml2.dylib */,
 				645864631A73762D00551A0F /* libpthread.dylib */,
@@ -725,7 +725,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					/Users/eddyborja/Documents/FacebookSDK,
 				);
 				INFOPLIST_FILE = Chatter/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
@@ -757,7 +756,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					/Users/eddyborja/Documents/FacebookSDK,
 				);
 				INFOPLIST_FILE = Chatter/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
