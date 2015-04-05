@@ -100,7 +100,7 @@
 		64FC95481A8D8E49001137A5 /* PublisherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64FC95471A8D8E49001137A5 /* PublisherViewController.swift */; };
 		64FC954A1A8D8E7E001137A5 /* UserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64FC95491A8D8E7E001137A5 /* UserViewController.swift */; };
 		64FC954C1A8EBEC5001137A5 /* LogoutSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64FC954B1A8EBEC5001137A5 /* LogoutSegue.swift */; };
-		B22176691AC49FBC00BB4401 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B22176671AC49FBC00BB4401 /* FacebookSDK.framework */; };
+		B22176691AC49FBC00BB4401 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B22176671AC49FBC00BB4401 /* FacebookSDK.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		B221766C1AC4A05F00BB4401 /* FBAudienceNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B221766B1AC4A05F00BB4401 /* FBAudienceNetwork.framework */; };
 /* End PBXBuildFile section */
 

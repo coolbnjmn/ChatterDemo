@@ -83,7 +83,7 @@ class ChatEntryViewController : UIViewController {
         
         PFFacebookUtils.logInWithPermissions(["email", "user_about_me"], {
             (user: PFUser!, error: NSError!) -> Void in
-            
+            println(PFFacebookUtils.version())
             if error != nil {
                 NSLog(error.description);
             }

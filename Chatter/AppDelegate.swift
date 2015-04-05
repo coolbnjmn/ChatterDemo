@@ -34,6 +34,7 @@ import UIKit
 import Parse
 import ParseUI
 
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -52,7 +53,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //Parse.setApplicationId("", clientKey: "")
         
         PFFacebookUtils.initializeFacebook();
-        
         
         PFAnalytics.trackAppOpenedWithLaunchOptionsInBackground(launchOptions, block: nil)
         
