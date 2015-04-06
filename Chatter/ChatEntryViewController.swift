@@ -113,9 +113,24 @@ class ChatEntryViewController : UIViewController {
                 
             } else {
                 NSLog("User logged in through Facebook!")
-                self.performSegueWithIdentifier("login", sender: self);
-                
-                SVProgressHUD.dismiss()
+                FBRequestConnection.startForMeWithCompletionHandler({ (connection : FBRequestConnection!, result : AnyObject!, error : NSError!) -> Void in
+                    
+                    PFUser.currentUser().setObject(result["id"], forKey: "facebookId")
+                    PFUser.currentUser().setObject(result["first_name"], forKey: "first_name")
+                    PFUser.currentUser().setObject(result["last_name"], forKey: "last_name")
+                    PFUser.currentUser().setObject(result["email"], forKey: "email")
+                    PFUser.currentUser().setObject(result["gender"], forKey: "gender")
+                    PFUser.currentUser().saveInBackgroundWithBlock({ (success : Bool, error : NSError!) -> Void in
+                        if error != nil {
+                            NSLog(error!.description);
+                        } else if success {
+                            self.performSegueWithIdentifier("login", sender: self);
+                            SVProgressHUD.dismiss()
+                            
+                        }
+                    })
+                    
+                })
             }
             
         })
@@ -136,9 +151,4 @@ class ChatEntryViewController : UIViewController {
         }
         
     }
-    
-
-
-    
-    
 }

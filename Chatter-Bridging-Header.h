@@ -38,5 +38,7 @@
 #import "ECSlidingViewController.h"
 #import "UIViewController+ECSlidingViewController.h"
 #import "UIImageView+WebCache.h"
+#import <Stripe/Stripe.h>
+#import <PaymentKit/PTKView.h>
 
 #endif

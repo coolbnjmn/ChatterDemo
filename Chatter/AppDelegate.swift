@@ -56,7 +56,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         PFAnalytics.trackAppOpenedWithLaunchOptionsInBackground(launchOptions, block: nil)
         
-        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        var timesLaunched : Int? = defaults.objectForKey("timesLaunched") as? Int
+        if(timesLaunched == nil) {
+            defaults.setInteger(0, forKey: "timesLaunched")
+        } else {
+            defaults.setInteger(timesLaunched!+1, forKey: "timesLaunched")
+        }
         return true
     }
 

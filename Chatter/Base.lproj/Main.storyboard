@@ -69,6 +69,7 @@
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </view>
+                    <navigationItem key="navigationItem" id="jlM-4O-Ll5"/>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
                         <outlet property="backgroundView" destination="wJu-Ga-KeC" id="ZSi-dR-Y0r"/>
@@ -86,7 +87,7 @@
                 </imageView>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Qdk-J1-0nS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-170.13333333333333" y="-600.18666666666661"/>
+            <point key="canvasLocation" x="-306" y="-600"/>
         </scene>
         <!--Sliding View Controller-->
         <scene sceneID="Uw9-eJ-z8u">
@@ -291,11 +292,28 @@
                     <connections>
                         <outlet property="profileButton" destination="RKr-9D-1o5" id="hd9-hE-bGC"/>
                         <segue destination="cOv-aK-fqn" kind="push" identifier="startNewChat" id="tpD-9u-6f6"/>
+                        <segue destination="ZuF-VC-Fqt" kind="push" identifier="showProfile" id="xIS-w0-adx"/>
+                        <segue destination="mCf-WK-dcZ" kind="push" identifier="editProfile" id="qaH-QU-QHn"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UtH-UM-Rie" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="364" y="82"/>
+            <point key="canvasLocation" x="364" y="133"/>
+        </scene>
+        <!--Stripe Card View Controller-->
+        <scene sceneID="dgP-y8-fkK">
+            <objects>
+                <viewController id="xdr-wv-4YS" customClass="StripeCardViewController" customModule="chatter" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="bYx-ah-E8e">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="9Mw-Ay-3Yy"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yrv-TS-hem" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="801" y="-1224"/>
         </scene>
         <!--New Chat-->
         <scene sceneID="5ke-x7-EnZ">
@@ -357,6 +375,168 @@
             </objects>
             <point key="canvasLocation" x="801" y="-613"/>
         </scene>
+        <!--Edit Profile View Controller-->
+        <scene sceneID="Yii-3c-da6">
+            <objects>
+                <tableViewController id="mCf-WK-dcZ" customClass="EditProfileViewController" customModule="chatter" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="cJr-YA-F14">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="editProfileCell" rowHeight="44" id="8NS-0t-3bE" customClass="EditProfileCell" customModule="chatter" customModuleProvider="target">
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8NS-0t-3bE" id="F6w-iK-UTM">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="alK-1c-m8d">
+                                            <rect key="frame" x="8" y="11" width="89" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" id="97l-2B-qb2">
+                                            <rect key="frame" x="105" y="8" width="207" height="30"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits"/>
+                                        </textField>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="detailTextField" destination="97l-2B-qb2" id="VYW-wQ-d8A"/>
+                                    <outlet property="titleLabel" destination="alK-1c-m8d" id="YWy-P7-wNG"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="mCf-WK-dcZ" id="H4l-cu-QEQ"/>
+                            <outlet property="delegate" destination="mCf-WK-dcZ" id="Kma-yE-cdU"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="rdG-nW-k9h"/>
+                    <connections>
+                        <segue destination="dkc-oK-uxw" kind="push" identifier="checkVerificationCode" id="iOg-nb-wFn"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DHW-QQ-Xed" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="86" y="-318"/>
+        </scene>
+        <!--Verify Phone Code View Controller-->
+        <scene sceneID="rC2-rY-gHq">
+            <objects>
+                <viewController id="dkc-oK-uxw" customClass="VerifyPhoneCodeViewController" customModule="chatter" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="AJm-Cz-4gf">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="nf2-If-oib">
+                                <rect key="frame" x="103" y="269" width="115" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <action selector="enterVerificationCode:" destination="dkc-oK-uxw" eventType="editingDidEndOnExit" id="tLN-Ua-ZUT"/>
+                                </connections>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter Verification Code" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="wbE-74-CRl">
+                                <rect key="frame" x="72" y="240" width="176" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="tFL-rh-MjT"/>
+                    <connections>
+                        <outlet property="verifyCodeTextField" destination="nf2-If-oib" id="Ceq-8X-yyO"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="b5w-oX-n6m" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="178" y="-1085"/>
+        </scene>
+        <!--Profile View Controller-->
+        <scene sceneID="sjh-uH-FSa">
+            <objects>
+                <viewController id="ZuF-VC-Fqt" customClass="ProfileViewController" customModule="chatter" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="fOe-GB-YvP">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="haJ-am-hmH">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="254"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="hCJ-j1-oFz">
+                                <rect key="frame" x="16" y="513" width="288" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <state key="normal" title="Logout"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="25"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="logout:" destination="ZuF-VC-Fqt" eventType="touchUpInside" id="ZPc-L1-mfM"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="FfK-PA-hPw">
+                                <rect key="frame" x="80" y="83" width="150" height="150"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Fd5-K9-tWz">
+                                <rect key="frame" x="16" y="470" width="288" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <state key="normal" title="View Cards"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="25"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="VJn-9K-W3M">
+                                <rect key="frame" x="16" y="427" width="288" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <state key="normal" title="Edit Cards"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="25"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="editCards:" destination="ZuF-VC-Fqt" eventType="touchUpInside" id="e97-1G-PnM"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="4bU-Ar-MzO"/>
+                    <connections>
+                        <outlet property="coverPhoto" destination="haJ-am-hmH" id="k37-E7-N81"/>
+                        <outlet property="editCards" destination="VJn-9K-W3M" id="TBZ-Oa-ddx"/>
+                        <outlet property="logoutButton" destination="hCJ-j1-oFz" id="ku9-N2-K2e"/>
+                        <outlet property="profilePhoto" destination="FfK-PA-hPw" id="GM9-Sj-EfH"/>
+                        <outlet property="viewCards" destination="Fd5-K9-tWz" id="zJd-Ej-qrF"/>
+                        <segue destination="ohF-ep-JZT" kind="custom" identifier="logout" customClass="LogoutSegue" customModule="chatter" id="xhq-5l-pD4"/>
+                        <segue destination="xdr-wv-4YS" kind="push" identifier="showCards" id="zzN-H4-WgC"/>
+                        <segue destination="mCf-WK-dcZ" kind="push" identifier="editProfile" id="ltU-Sl-oXc"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Al8-M2-abK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="479" y="-1059"/>
+        </scene>
         <!--Stream View Controller-->
         <scene sceneID="Afr-uS-PSw">
             <objects>
@@ -413,7 +593,8 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="NbL-Ww-bGK"/>
         <segue reference="jk5-n6-jBi"/>
-        <segue reference="imo-Ua-hqb"/>
+        <segue reference="ltU-Sl-oXc"/>
     </inferredMetricsTieBreakers>
 </document>

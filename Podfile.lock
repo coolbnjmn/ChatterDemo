@@ -1,5 +1,6 @@
 PODS:
   - ECSlidingViewController (2.0.3)
+  - PaymentKit (1.1.1)
   - SDWebImage (3.7.1):
     - SDWebImage/Core (= 3.7.1)
   - SDWebImage/Core (3.7.1)
@@ -10,12 +11,14 @@ PODS:
 
 DEPENDENCIES:
   - ECSlidingViewController (~> 2.0.3)
+  - PaymentKit
   - SDWebImage (~> 3.7)
   - Stripe
   - SVProgressHUD (HEAD)
 
 SPEC CHECKSUMS:
   ECSlidingViewController: 6485c14f23b4487e9946535421ca8f111f86cc53
+  PaymentKit: 323c25233af5060880daa0c31366d4b688c34487
   SDWebImage: ed3095af2ff88b436426037444979b917f6c5575
   Stripe: 8a456332f4db97bd0b8457fc8cce1e1a69ac0cd1
   SVProgressHUD: 748080e4f36e603f6c02aec292664239df5279c1

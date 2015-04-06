@@ -26,6 +26,38 @@ var opentok = require("cloud/opentok/opentok.js").createOpenTokSDK("45198012", "
 
 var Session = Parse.Object.extend("Session");
 
+var twilio = require('twilio')('ACcc39af43df9296cbcfb3826b99274678', '205db33bd7f9f9405d91f919d7e35a95')
+
+Parse.Cloud.define("sendVerificationCode", function(request, response) {
+    var verificationCode = Math.floor(Math.random()*999999);
+    var user = Parse.User.current();
+    user.set("phoneVerificationCode", verificationCode);
+    user.save();
+    
+    twilio.sendSms({
+        From: "(650) 666-0785",
+        To: request.params.phoneNumber,
+        Body: "Your verification code is " + verificationCode + "."
+    }, function(err, responseData) { 
+        if (err) {
+          response.error(err);
+        } else { 
+          response.success("Success");
+        }
+    });
+});
+
+Parse.Cloud.define("verifyPhoneNumber", function(request, response) {
+    var user = Parse.User.current();
+    var verificationCode = user.get("phoneVerificationCode");
+    if (verificationCode == request.params.phoneVerificationCode) {
+        user.set("phoneNumber", request.params.phoneNumber);
+        user.save();
+        response.success("Success");
+    } else {
+        response.error("Invalid verification code.");
+    }
+});
 
 // Use Parse.Cloud.define to define as many cloud functions as you want.
 Parse.Cloud.define("joinSession", function(request, response) {

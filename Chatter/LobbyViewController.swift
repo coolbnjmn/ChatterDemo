@@ -39,6 +39,11 @@ class LobbyViewController : UIViewController {
     
     override func viewDidLoad() {
         
+        let defaults = NSUserDefaults.standardUserDefaults()
+        if((defaults.objectForKey("timesLaunched") as Int) < 2) {
+            performSegueWithIdentifier("editProfile", sender: self)
+        }
+        
         var facebookId = PFUser.currentUser().objectForKey("facebookId") as String
         var imageString = "http://graph.facebook.com/" + facebookId + "/picture?type=large"
         var url = NSURL(string: imageString)
