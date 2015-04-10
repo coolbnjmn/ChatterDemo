@@ -59,7 +59,7 @@ class SessionsViewController : PFQueryTableViewController {
     override func queryForTable() -> PFQuery! {
         var query = PFQuery(className: "Session")
         
-        if countElements(objects) == 0 {
+        if count(objects) == 0 {
             query.cachePolicy = kPFCachePolicyCacheThenNetwork
         }
         
@@ -72,24 +72,24 @@ class SessionsViewController : PFQueryTableViewController {
     override func tableView(tableView: UITableView!, cellForRowAtIndexPath indexPath: NSIndexPath!, object: PFObject!) -> PFTableViewCell! {
         
         var identifier = "sessionCell"
-        var cell = tableView.dequeueReusableCellWithIdentifier(identifier) as SessionCell
+        var cell = tableView.dequeueReusableCellWithIdentifier(identifier) as! SessionCell
         
         var session = objectAtIndexPath(indexPath) as PFObject
         
         cell.hostAvatar.sd_cancelCurrentImageLoad();
         if (session["facebookId"] != nil) {
-            var facebookId = session["facebookId"] as String
+            var facebookId = session["facebookId"] as! String
             var imageString = "http://graph.facebook.com/" + facebookId + "/picture?type=large"
             var imageURL = NSURL(string: imageString)
             cell.hostAvatar.sd_setImageWithURL(imageURL);
         }
  
         if session["hostName"] != nil {
-            cell.hostName.text = session["hostName"] as NSString
+            cell.hostName.text = session["hostName"] as! String
         }
         
         if session["chatTitle"] != nil {
-            cell.subjectTitle.text = session["chatTitle"] as NSString
+            cell.subjectTitle.text = session["chatTitle"] as! String
         }
         
         
@@ -100,7 +100,7 @@ class SessionsViewController : PFQueryTableViewController {
 
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
-        var session = objects[indexPath.row] as PFObject
+        var session = objects[indexPath.row] as! PFObject
         
 
     }
@@ -109,15 +109,15 @@ class SessionsViewController : PFQueryTableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        var session = objects[indexPath.row] as PFObject
+        var session = objects[indexPath.row] as! PFObject
         performSegueWithIdentifier("viewDetails", sender: session)
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "viewDetails" {
            
-            var d = segue.destinationViewController as ChatDetailsViewController
-            d.session = sender as PFObject
+            var d = segue.destinationViewController as! ChatDetailsViewController
+            d.session = sender as! PFObject
             
         }
     }

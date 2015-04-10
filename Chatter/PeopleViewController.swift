@@ -38,7 +38,7 @@ class PeopleViewController : UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        var cell = tableView.dequeueReusableCellWithIdentifier("peopleCell") as UITableViewCell
+        var cell = tableView.dequeueReusableCellWithIdentifier("peopleCell") as! UITableViewCell
         
         return cell
     }

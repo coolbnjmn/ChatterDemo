@@ -28,6 +28,25 @@ var Session = Parse.Object.extend("Session");
 
 var twilio = require('twilio')('ACcc39af43df9296cbcfb3826b99274678', '205db33bd7f9f9405d91f919d7e35a95')
 
+var Stripe = require('stripe');
+Stripe.initialize('pk_live_6iwDAqFNTbmj0TEMjxtFExz4');
+
+
+Parse.Cloud.define("saveCardInformation", function(request, response) {
+
+    Stripe.Customers.create({
+      source: request.params.cardToken,
+    },{
+      success: function(httpResponse) {
+        response.success("Customer created!");
+        console.log(httpResponse);
+      },
+      error: function(httpResponse) {
+        response.error(httpResponse.message);
+      }
+    });
+
+});
 Parse.Cloud.define("sendVerificationCode", function(request, response) {
     var verificationCode = Math.floor(Math.random()*999999);
     var user = Parse.User.current();

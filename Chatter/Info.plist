@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.boostmg.chatter</string>
+	<string>BenjaminHendricks.Chatter</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -32,7 +32,7 @@
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>FacebookAppID</key>
-	<string>614384105361475</string>
+	<string>351517215042284</string>
 	<key>FacebookDisplayName</key>
 	<string>Chatter</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -57,7 +57,14 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-	<key>URL Schemes</key>
-	<array/>
+	<key>URL Types</key>
+	<array>
+		<dict>
+			<key>URL Schemes</key>
+			<array>
+				<string>fb351517215042284</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

@@ -59,7 +59,7 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let sessionId = self.session["sessionID"] as String
+        let sessionId = self.session["sessionID"] as! String
         tokSession = OTSession(apiKey: apiKey, sessionId: sessionId, delegate: self)
         
         
@@ -89,12 +89,12 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
     func doConnect() {
         
         
-        let occupants = session["chatters"] as NSArray?
+        let occupants = session["chatters"] as! NSArray?
         
         var array = NSMutableArray()
         
         if occupants != nil {
-            array.addObjectsFromArray(occupants!)
+            array.addObjectsFromArray(occupants! as! [AnyObject])
         }
         /*
         switch array.count {
@@ -127,7 +127,7 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
         
         var error : OTError?
         
-        let publisherToken = session["publisherToken"] as String
+        let publisherToken = session["publisherToken"] as! String
         println(publisherToken)
         tokSession!.connectWithToken(publisherToken, error: &error)
         if error != nil {
@@ -224,8 +224,8 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
     func sessionDidDisconnect(openTokSession: OTSession!) {
         println("Session did disconnect")
 
-        var userFacebookId = PFUser.currentUser().objectForKey("facebookId") as String
-        var sessionFacebookId = session["facebookId"] as String
+        var userFacebookId = PFUser.currentUser().objectForKey("facebookId") as! String
+        var sessionFacebookId = session["facebookId"] as! String
         if userFacebookId == sessionFacebookId {
             session.deleteInBackgroundWithBlock(nil)
         }

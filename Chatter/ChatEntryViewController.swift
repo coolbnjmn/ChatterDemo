@@ -81,7 +81,7 @@ class ChatEntryViewController : UIViewController {
         
         SVProgressHUD.showWithStatus("Logging In")
         
-        PFFacebookUtils.logInWithPermissions(["email", "user_about_me"], {
+        PFFacebookUtils.logInWithPermissions(["email", "user_about_me"], block: {
             (user: PFUser!, error: NSError!) -> Void in
             println(PFFacebookUtils.version())
             if error != nil {
@@ -118,7 +118,6 @@ class ChatEntryViewController : UIViewController {
                     PFUser.currentUser().setObject(result["id"], forKey: "facebookId")
                     PFUser.currentUser().setObject(result["first_name"], forKey: "first_name")
                     PFUser.currentUser().setObject(result["last_name"], forKey: "last_name")
-                    PFUser.currentUser().setObject(result["email"], forKey: "email")
                     PFUser.currentUser().setObject(result["gender"], forKey: "gender")
                     PFUser.currentUser().saveInBackgroundWithBlock({ (success : Bool, error : NSError!) -> Void in
                         if error != nil {

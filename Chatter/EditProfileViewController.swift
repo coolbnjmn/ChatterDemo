@@ -26,6 +26,7 @@ class EditProfileViewController: UITableViewController {
         
         let backButton = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.Plain, target: navigationController, action: nil)
         navigationItem.leftBarButtonItem = backButton
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -49,32 +50,36 @@ class EditProfileViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("editProfileCell", forIndexPath: indexPath) as EditProfileCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("editProfileCell", forIndexPath: indexPath) as! EditProfileCell
 
         // Configure the cell...
-        cell.titleLabel?.text = categoriesArray.objectAtIndex(indexPath.row) as String
+        cell.titleLabel?.text = categoriesArray.objectAtIndex(indexPath.row) as! String
         
         var detailText : String = ""
         
-        detailText = (PFUser.currentUser().objectForKey(categoriesKeys.objectAtIndex(indexPath.row) as String) != nil ? PFUser.currentUser().objectForKey(categoriesKeys.objectAtIndex(indexPath.row) as String) as String : "")
+        detailText = (PFUser.currentUser().objectForKey(categoriesKeys.objectAtIndex(indexPath.row) as! String) != nil ? PFUser.currentUser().objectForKey(categoriesKeys.objectAtIndex(indexPath.row) as! String) as! String : "")
 
         cell.detailTextField?.placeholder = detailText
         
         return cell
     }
-
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        self.tableView.deselectRowAtIndexPath(indexPath, animated:true)
+    }
+    
     func saveEdits(sender: AnyObject) {
         
         var phoneNumber = ""
         for(var i = 0; i < categoriesKeys.count; i++) {
             var myIndexPath = NSIndexPath(forRow: i, inSection: 0)
-            var detailText = (self.tableView.cellForRowAtIndexPath(myIndexPath) as EditProfileCell).detailTextField.text
+            var detailText = (self.tableView.cellForRowAtIndexPath(myIndexPath) as! EditProfileCell).detailTextField.text
             if (detailText != nil && detailText != "") {
                 println(detailText)
-                if(categoriesKeys[i] as NSString == "phone_number") {
+                if(categoriesKeys[i] as! NSString == "phone_number") {
                     phoneNumber = detailText
                 }
-                PFUser.currentUser().setObject(detailText, forKey: (categoriesKeys.objectAtIndex(i) as String))
+                PFUser.currentUser().setObject(detailText, forKey: (categoriesKeys.objectAtIndex(i) as! String))
             }
         }
       
@@ -95,7 +100,7 @@ class EditProfileViewController: UITableViewController {
                     // verification code was incorrect
                 }
             }
-            PFCloud.callFunctionInBackground("sendVerificationCode", withParameters: params, block: block)
+            PFCloud.callFunctionInBackground("sendVerificationCode", withParameters: params as [NSObject : AnyObject], block: block)
         } else {
             self.navigationController?.popToRootViewControllerAnimated(true)
         }

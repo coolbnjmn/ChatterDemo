@@ -12,10 +12,17 @@ import Parse
 class VerifyPhoneCodeViewController: UIViewController {
 
     @IBOutlet weak var verifyCodeTextField: UITextField!
+    @IBOutlet weak var doneButton: UIButton!
+    
+    @IBAction func finishVerification(sender: AnyObject) {
+        self.enterVerificationCode(sender)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
+        verifyCodeTextField.keyboardType = UIKeyboardType.NumberPad
     }
 
     override func didReceiveMemoryWarning() {
@@ -29,12 +36,14 @@ class VerifyPhoneCodeViewController: UIViewController {
         let block : PFIdResultBlock = { (result: AnyObject!, error: NSError!) in
             if(error == nil) {
                 // no error
+                var defaults = NSUserDefaults.standardUserDefaults()
+                defaults.setBool(true,  forKey:"phoneVerified")
                 self.navigationController?.popToRootViewControllerAnimated(true)
             } else {
                 // verification code was incorrect
             }
         }
-        PFCloud.callFunctionInBackground("verifyPhoneNumber", withParameters: params, block: block)
+        PFCloud.callFunctionInBackground("verifyPhoneNumber", withParameters: params as [NSObject : AnyObject], block: block)
     }
 
     /*

@@ -46,8 +46,8 @@ class ChatDetailsViewController : UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         if segue.identifier == "enterStream" {
-            var session = sender as PFObject
-            var svc = segue.destinationViewController as StreamViewController
+            var session = sender as! PFObject
+            var svc = segue.destinationViewController as! StreamViewController
             
             svc.session = session
         }

@@ -57,7 +57,7 @@ class LoginSegue : UIStoryboardSegue {
            
             }) { (success : Bool) -> Void in
                 
-            self.sourceViewController.presentViewController(self.destinationViewController as UIViewController, animated: false, completion: nil)
+            self.sourceViewController.presentViewController(self.destinationViewController as! UIViewController, animated: false, completion: nil)
             
             window?.clipsToBounds = true
             window?.layer.cornerRadius = 8.0

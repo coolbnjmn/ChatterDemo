@@ -46,7 +46,7 @@ class CategoryViewController : UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         
-        var cell = tableView.dequeueReusableCellWithIdentifier("categoryCell") as UITableViewCell
+        var cell = tableView.dequeueReusableCellWithIdentifier("categoryCell") as! UITableViewCell
         
         
         return cell;
@@ -55,7 +55,7 @@ class CategoryViewController : UITableViewController {
     
     override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
         
-        var categoryCell = cell as CategoryCell
+        var categoryCell = cell as! CategoryCell
         
         categoryCell.categoryLabel.text = categories[indexPath.row]
         
@@ -65,7 +65,7 @@ class CategoryViewController : UITableViewController {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return countElements(categories)
+            return count(categories)
         default:
             return 0
         }

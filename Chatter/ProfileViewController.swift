@@ -31,17 +31,29 @@ SOFTWARE.
 
 import UIKit
 import Parse
+import PassKit
 
-class ProfileViewController : UIViewController {
+class ProfileViewController : UIViewController , SKProductsRequestDelegate, SKPaymentTransactionObserver {
     
     @IBOutlet weak var profilePhoto: UIImageView!
     @IBOutlet weak var coverPhoto: UIImageView!
     @IBOutlet weak var logoutButton: UIButton!
-    @IBOutlet weak var viewCards: UIButton!
     @IBOutlet weak var editCards: UIButton!
+    @IBOutlet weak var applePayButton: UIButton!
     
+    var product_id: NSString?
+    var iapView: UIView!
+    var iapButton : UIButton!
+    var creditLabel : UILabel!
+    var currentValidProducts : [AnyObject]!
+    
+    let SupportedPaymentNetworks = [PKPaymentNetworkVisa, PKPaymentNetworkMasterCard, PKPaymentNetworkAmex]
+    let ApplePaySwagMerchantID = "merchant.BenjaminHendricks.Chatter"
     override func viewDidLoad() {
         
+        SKPaymentQueue.defaultQueue().addTransactionObserver(self)
+        product_id = "session_time"
+
         var editProfileButton : UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Edit, target: self, action:"editProfileButtonTapped:")
         self.navigationItem.rightBarButtonItem = editProfileButton
         
@@ -49,20 +61,22 @@ class ProfileViewController : UIViewController {
         logoutButton.layer.borderWidth = 2
         logoutButton.layer.cornerRadius = logoutButton.frame.size.height * 0.5
 
-        viewCards.frame = CGRectMake(10, self.view.bounds.size.height - 165, self.view.bounds.size.width-20, 50)
-        viewCards.layer.borderWidth = 2
-        viewCards.layer.cornerRadius = logoutButton.frame.size.height * 0.5
+        applePayButton.frame = CGRectMake(10, self.view.bounds.size.height - 165, self.view.bounds.size.width-20, 50)
+        applePayButton.layer.borderWidth = 2
+        applePayButton.layer.cornerRadius = logoutButton.frame.size.height * 0.5
+        applePayButton.imageView?.frame = CGRectMake(0,0,applePayButton.frame.size.width, applePayButton.frame.size.height)
+
+
         editCards.frame = CGRectMake(10, self.view.bounds.size.height - 230, self.view.bounds.size.width-20, 50)
         editCards.layer.borderWidth = 2
         editCards.layer.cornerRadius = logoutButton.frame.size.height * 0.5
         
-        var facebookId = PFUser.currentUser().objectForKey("facebookId") as String
+        var facebookId = PFUser.currentUser().objectForKey("facebookId") as! String
         var imageURLString = "http://graph.facebook.com/" + facebookId + "/picture?type=large"
         var imageURL = NSURL(string: imageURLString)
         profilePhoto.sd_setImageWithURL(imageURL)
         coverPhoto.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.width)
-//        coverPhoto.sd_setImageWithURL(imageURL, placeholderImage: "centeredPeople.png")
-//        coverPhoto.sd_setImageWithURL(imageURL, placeholderImage: UIImage(named: "centeredPeople.png"))
+
         SDWebImageDownloader.sharedDownloader().downloadImageWithURL(imageURL, options: nil, progress: nil, completed: {[weak self] (image, data, error, finished) in
             if let wSelf = self {
                 // do what you want with the image/self
@@ -75,15 +89,13 @@ class ProfileViewController : UIViewController {
                 var gaussianBlurFilter : CIFilter = CIFilter(name: "CIGaussianBlur")
                 gaussianBlurFilter.setValue(imageToBlur, forKey: "inputImage")
                 gaussianBlurFilter.setValue(NSNumber(float: 10), forKey: "inputRadius")
-                let resultImage : CIImage = gaussianBlurFilter.valueForKey("outputImage") as CIImage
+                let resultImage : CIImage = gaussianBlurFilter.valueForKey("outputImage") as! CIImage
                 let endImage : UIImage = UIImage(CIImage: resultImage)!
                 
                 
                 wSelf.coverPhoto.image = endImage
                 println(wSelf.coverPhoto.frame)
                 wSelf.coverPhoto.frame = CGRectMake(0, 0, wSelf.view.bounds.size.width, wSelf.view.bounds.size.width)
-//                wSelf.view.backgroundColor = wSelf.averageColor(image)
-//                println(wSelf.view.backgroundColor)
                 wSelf.view.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.5)
                 
             }
@@ -113,6 +125,14 @@ class ProfileViewController : UIViewController {
         profilePhoto.layer.cornerRadius = profilePhoto.layer.frame.size.height * 0.5
         profilePhoto.layer.masksToBounds = true
         
+        creditLabel = UILabel()
+        creditLabel.text = "You have X credits."
+        creditLabel.textColor = UIColor.orangeColor()
+        creditLabel.sizeToFit()
+        creditLabel.frame.origin = CGPointMake((self.view.bounds.size.width - creditLabel.frame.size.width)/2, coverPhoto.frame.size.height)
+        
+        self.view.addSubview(creditLabel)
+        self.updateCreditLabel()
     }
     
     
@@ -138,6 +158,176 @@ class ProfileViewController : UIViewController {
     func editProfileButtonTapped(sender: AnyObject) {
         println("edit tapped")
         performSegueWithIdentifier("editProfile", sender: self)
+    }
+    @IBAction func applePayButtonPressed(sender : AnyObject) {
+        // apple pay stuff here
+        println("button pressed")
+
+        if (SKPaymentQueue.canMakePayments())
+        {
+            var productIDArray: [AnyObject!] = ["10_credits", "55_credits", "110_credits", "270_credits", "530_credits"]
+            
+            var productID:NSSet = NSSet(array: productIDArray)
+            
+            var productsRequest:SKProductsRequest = SKProductsRequest(productIdentifiers: productID as Set<NSObject>);
+            productsRequest.delegate = self;
+            productsRequest.start();
+            println("Fething Products");
+        } else {
+            println("can not make purchases");
+        }
+    }
+    func updateCreditLabel() {
+        var creditStringObj : AnyObject? = PFUser.currentUser().objectForKey("credits")
+        var creditString : String
+        if(creditStringObj == nil) {
+            creditString = "0"
+        } else {
+            creditString = creditStringObj as! String
+        }
+        
+        creditLabel.text = "You have " + creditString + " credits. "
+        creditLabel.sizeToFit()
+        creditLabel.frame.origin = CGPointMake((self.view.bounds.size.width - creditLabel.frame.size.width)/2, coverPhoto.frame.size.height)
+        self.view.layoutSubviews()
+    }
+    
+    func buyProduct(product: SKProduct){
+        println("Sending the Payment Request to Apple");
+        var payment = SKPayment(product: product)
+        SKPaymentQueue.defaultQueue().addPayment(payment);
+        
+    }
+    
+    func dismissIAP(sender: AnyObject!) {
+        iapView.removeFromSuperview()
+        iapButton.removeFromSuperview()
+    }
+    
+    func iapItemPressed(sender: AnyObject!) {
+        var senderButton : UIButton = sender as! UIButton
+        var tag : Int = senderButton.tag
+        buyProduct(currentValidProducts[tag] as! SKProduct)
+    }
+    
+    func isOrderedBefore(a: AnyObject, b: AnyObject) -> Bool {
+        let aA = a as! SKProduct
+        let bB = b as! SKProduct
+        let aPrice = aA.price.integerValue
+        let bPrice = bB.price.integerValue
+        if(aPrice < bPrice) {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func productsRequest (request: SKProductsRequest, didReceiveResponse response: SKProductsResponse) {
+        println("got the request from Apple")
+        var count : Int = response.products.count
+        if (count>0) {
+            var validProducts = response.products
+            iapView = UIView(frame: CGRectMake(((self.view.bounds.size.width - self.view.bounds.size.width/2)/2),((self.view.bounds.size.height - self.view.bounds.size.height/2)/2),self.view.bounds.size.width/2, self.view.bounds.size.height/2))
+            iapView.backgroundColor = UIColor.redColor()
+            iapView.layer.cornerRadius = 25
+            
+            
+            validProducts.sort(isOrderedBefore)
+            currentValidProducts = validProducts
+
+            for(var i = 0; i < validProducts.count; i++) {
+                println(validProducts[i])
+                println(validProducts[i].localizedTitle)
+                var iapItemButton = UIButton(frame: CGRectMake(CGFloat(10),CGFloat(50*i+5*(i+1)),self.view.bounds.size.width/2 - 20,CGFloat(50)))
+                iapItemButton.layer.cornerRadius = 10
+                iapItemButton.backgroundColor = UIColor.whiteColor()
+                iapItemButton.setTitle(validProducts[i].localizedTitle, forState:.Normal)
+                iapItemButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
+                iapItemButton.setTitleColor(UIColor.redColor(), forState: .Selected)
+                iapItemButton.addTarget(self, action: "iapItemPressed:", forControlEvents: .TouchUpInside)
+                iapItemButton.tag = i
+                iapView.addSubview(iapItemButton)
+                
+            }
+            
+            iapButton = UIButton(frame: CGRectMake(0,0,self.view.bounds.size.width, self.view.bounds.size.height))
+            iapButton.backgroundColor = UIColor.clearColor()
+            self.view.addSubview(iapView)
+            self.view.insertSubview(iapButton, belowSubview: iapView)
+            
+            iapButton.addTarget(self, action: "dismissIAP:", forControlEvents: .TouchUpInside)
+            
+            
+            
+            var validProduct: SKProduct = response.products[0] as! SKProduct
+        } else {
+            println("nothing")
+        }
+    }
+    
+    
+    func request(request: SKRequest!, didFailWithError error: NSError!) {
+        println("La vaina fallo");
+    }
+    
+    func paymentQueue(queue: SKPaymentQueue!, updatedTransactions transactions: [AnyObject]!)    {
+        println("Received Payment Transaction Response from Apple");
+        
+        for transaction:AnyObject in transactions {
+            if let trans:SKPaymentTransaction = transaction as? SKPaymentTransaction{
+                switch trans.transactionState {
+                case .Purchased:
+                    println("Product Purchased");
+                    var currentCreditString: String = PFUser.currentUser().objectForKey("credits") as! String
+                    var currentCredits : Int = currentCreditString.toInt()!
+                    
+                    println(trans.payment.productIdentifier)
+                    switch trans.payment.productIdentifier {
+                        case "10_credits":
+                            currentCredits += 10
+                            break;
+                        case "55_credits":
+                            currentCredits += 55
+                            break;
+                        case "110_credits":
+                            currentCredits += 110
+                            break;
+                        case "270_credits":
+                            currentCredits += 270
+                            break;
+                        case "530_credits":
+                            currentCredits += 530
+                            break;
+                        default:
+                            println("error")
+                            break;
+                    }
+                    PFUser.currentUser().setObject(currentCredits.description, forKey: "credits")
+                    var error : NSErrorPointer = NSErrorPointer()
+                    PFUser.currentUser().save(error)
+                    if(error != nil) {
+                        /// Do error handling
+                        println("error in credit giving")
+                    }
+                    
+                    self.updateCreditLabel()
+                    SKPaymentQueue.defaultQueue().finishTransaction(transaction as! SKPaymentTransaction)
+                    self.dismissIAP(self)
+                    
+                    break;
+                case .Failed:
+                    println("Purchased Failed");
+                    println((transaction as! SKPaymentTransaction).error)
+                    SKPaymentQueue.defaultQueue().finishTransaction(transaction as! SKPaymentTransaction)
+                    break;
+                    // case .Restored:
+                    //[self restoreTransaction:transaction];
+                default:
+                    break;
+                }
+            }
+        }
+        
     }
     
     

@@ -102,6 +102,7 @@
 		64FC954C1A8EBEC5001137A5 /* LogoutSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64FC954B1A8EBEC5001137A5 /* LogoutSegue.swift */; };
 		B22176691AC49FBC00BB4401 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B22176671AC49FBC00BB4401 /* FacebookSDK.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		B221766C1AC4A05F00BB4401 /* FBAudienceNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B221766B1AC4A05F00BB4401 /* FBAudienceNetwork.framework */; };
+		B26333531AD447F0004982C2 /* ApplePayBTN_32pt__black_logo_@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B26333521AD447F0004982C2 /* ApplePayBTN_32pt__black_logo_@3x.png */; };
 		B2C327741AD206EB008ED98B /* StripeCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C327731AD206EB008ED98B /* StripeCardViewController.swift */; };
 		B2F3B64C1AD2538B00F91DFC /* VerifyPhoneCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F3B64B1AD2538B00F91DFC /* VerifyPhoneCodeViewController.swift */; };
 		B2F405DA1AD23BB400A180AC /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F405D91AD23BB400A180AC /* EditProfileViewController.swift */; };
@@ -192,6 +193,8 @@
 		9EF3A3E1ACACE7A30FDB8204 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		B22176671AC49FBC00BB4401 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		B221766B1AC4A05F00BB4401 /* FBAudienceNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBAudienceNetwork.framework; sourceTree = "<group>"; };
+		B26333511AD44615004982C2 /* chatter.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = chatter.entitlements; sourceTree = "<group>"; };
+		B26333521AD447F0004982C2 /* ApplePayBTN_32pt__black_logo_@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ApplePayBTN_32pt__black_logo_@3x.png"; sourceTree = "<group>"; };
 		B2C327731AD206EB008ED98B /* StripeCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StripeCardViewController.swift; sourceTree = "<group>"; };
 		B2F3B64B1AD2538B00F91DFC /* VerifyPhoneCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifyPhoneCodeViewController.swift; sourceTree = "<group>"; };
 		B2F405D91AD23BB400A180AC /* EditProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
@@ -307,6 +310,7 @@
 		6458639C1A718A7E00551A0F /* Chatter */ = {
 			isa = PBXGroup;
 			children = (
+				B26333511AD44615004982C2 /* chatter.entitlements */,
 				6473377E1A9C59A200BD993D /* Segues */,
 				6487BB5D1A95316700BE7D32 /* Obsolete */,
 				6487BB5C1A9313C200BE7D32 /* TableCells */,
@@ -333,6 +337,7 @@
 		6458639D1A718A7E00551A0F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				B26333521AD447F0004982C2 /* ApplePayBTN_32pt__black_logo_@3x.png */,
 				B2FDA1141AD1C55600F25E9E /* centeredPeople.png */,
 				647AE6EC1A8C24F1008A0418 /* Gradient@3x.png */,
 				647AE6E61A8C21C3008A0418 /* ChatterBG@3x.jpg */,
@@ -498,7 +503,12 @@
 				TargetAttributes = {
 					645863991A718A7E00551A0F = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = 2S5283J4R6;
+						DevelopmentTeam = M6Y34M2A35;
+						SystemCapabilities = {
+							com.apple.OMC = {
+								enabled = 0;
+							};
+						};
 					};
 					645863AE1A718A7E00551A0F = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -534,6 +544,7 @@
 				645863A51A718A7E00551A0F /* Main.storyboard in Resources */,
 				B2FDA1151AD1C55600F25E9E /* centeredPeople.png in Resources */,
 				645863AA1A718A7E00551A0F /* LaunchScreen.xib in Resources */,
+				B26333531AD447F0004982C2 /* ApplePayBTN_32pt__black_logo_@3x.png in Resources */,
 				645863A71A718A7E00551A0F /* Images.xcassets in Resources */,
 				6458646F1A76D4D400551A0F /* Dots.png in Resources */,
 				647AE6ED1A8C24F1008A0418 /* Gradient@3x.png in Resources */,
@@ -749,7 +760,7 @@
 				INFOPLIST_FILE = Chatter/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-l\"Pods-SVProgressHUD\"",
 					"-framework",
@@ -761,7 +772,7 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Chatter-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = arm64;
+				VALID_ARCHS = "arm64 armv7";
 			};
 			name = Debug;
 		};
@@ -780,7 +791,7 @@
 				INFOPLIST_FILE = Chatter/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"-l\"Pods-SVProgressHUD\"",
 					"-framework",
@@ -792,7 +803,7 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Chatter-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = arm64;
+				VALID_ARCHS = "arm64 armv7";
 			};
 			name = Release;
 		};
@@ -811,10 +822,10 @@
 				);
 				INFOPLIST_FILE = ChatterTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Chatter.app/Chatter";
-				VALID_ARCHS = arm64;
+				VALID_ARCHS = "arm64 armv7";
 			};
 			name = Debug;
 		};
@@ -831,7 +842,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Chatter.app/Chatter";
-				VALID_ARCHS = arm64;
+				VALID_ARCHS = "arm64 armv7";
 			};
 			name = Release;
 		};

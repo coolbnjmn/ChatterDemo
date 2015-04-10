@@ -38,10 +38,14 @@ class NewChatViewController : UIViewController, UITextFieldDelegate, UITextViewD
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var descriptionField: UITextView!
     
+    override func viewDidLoad() {
+        let saveBarButtonItem : UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Save, target: self, action: "startNewChat:")
+        self.navigationItem.rightBarButtonItem = saveBarButtonItem
+    }
     @IBAction func startNewChat(sender: AnyObject) {
         
-        var facebookId = PFUser.currentUser().objectForKey("facebookId") as String
-        var name = PFUser.currentUser().objectForKey("first_name") as String
+        var facebookId = PFUser.currentUser().objectForKey("facebookId") as! String
+        var name = PFUser.currentUser().objectForKey("first_name") as! String
         
         var parameters = [ "facebookId" : facebookId,
                            "hostName" : name,
@@ -54,9 +58,9 @@ class NewChatViewController : UIViewController, UITextFieldDelegate, UITextViewD
                 return
             }
             
-            var session = result as PFObject
-            var token = result["publisherToken"] as String
-            var sessionID = result["sessionID"] as String
+            var session = result as! PFObject
+            var token = result["publisherToken"] as! String
+            var sessionID = result["sessionID"] as! String
             NSLog(token)
             NSLog(sessionID)
             
@@ -70,8 +74,8 @@ class NewChatViewController : UIViewController, UITextFieldDelegate, UITextViewD
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         if segue.identifier == "enterStream" {
-            var session = sender as PFObject
-            var svc = segue.destinationViewController as StreamViewController
+            var session = sender as! PFObject
+            var svc = segue.destinationViewController as! StreamViewController
             
             svc.session = session
         }

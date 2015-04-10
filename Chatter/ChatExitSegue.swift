@@ -35,7 +35,7 @@ class ChatExitSegue : UIStoryboardSegue {
 
     override func perform() {
         
-        self.sourceViewController.presentViewController(self.destinationViewController as UIViewController, animated: false, completion: nil)
+        self.sourceViewController.presentViewController(self.destinationViewController as! UIViewController, animated: false, completion: nil)
         
     }
     
