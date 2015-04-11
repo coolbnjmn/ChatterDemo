@@ -48,8 +48,8 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
     var tokSubscriber : OTSubscriber? = nil
     
     var userView : UIView?
-    
-
+    var timer : NSTimer!
+    var timeLabel : UILabel!
     
     override func prefersStatusBarHidden() -> Bool {
         return true
@@ -173,16 +173,16 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
             showAlert(error!.localizedDescription)
         }
         
-        let viewSize = CGSizeMake(view.frame.size.height*0.5, view.frame.size.height*0.5)
+        let viewSize = CGSizeMake(view.frame.size.width, view.frame.size.height*0.5)
         userView = tokPublisher!.view
         
         if userView != nil {
-            userView!.layer.cornerRadius = viewSize.height * 0.5
+            userView!.layer.cornerRadius = 7.5
             userView!.clipsToBounds = true
             view.insertSubview(userView!, atIndex: 0)
-            userView!.frame = CGRectMake(0, 0, viewSize.width, viewSize.height)
-            userView!.center = CGPointMake(view.frame.size.width*0.5,
-                                           view.frame.size.height*0.5)
+            userView!.frame = CGRectMake(0, viewSize.height, viewSize.width, viewSize.height);
+//            userView!.center = CGPointMake(view.frame.size.width*0.5,
+//                                           view.frame.size.height*0.5)
         }
         
         
@@ -270,17 +270,56 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
     }
     
     
+    //helper for OTSubscriber delegate callback
+    func checkTime(sender: NSTimer) {
+        println(sender.userInfo);
+    }
+    
+    func updateTime(sender: NSTimer) {
+        var currentTime = NSDate.timeIntervalSinceReferenceDate()
+        
+        //Find the difference between current time and start time.
+        var elapsedTime: NSTimeInterval = currentTime - (sender.userInfo as! NSTimeInterval)
+        
+        //calculate the minutes in elapsed time.
+        let minutes = UInt8(elapsedTime / 60.0)
+        elapsedTime -= (NSTimeInterval(minutes) * 60)
+        
+        //calculate the seconds in elapsed time.
+        let seconds = UInt8(elapsedTime)
+        elapsedTime -= NSTimeInterval(seconds)
+        
+        //add the leading zero for minutes, seconds and millseconds and store them as string constants
+        let strMinutes = minutes > 9 ? String(minutes):"0" + String(minutes)
+        let strSeconds = seconds > 9 ? String(seconds):"0" + String(seconds)
+        
+        //concatenate minuets, seconds and milliseconds as assign it to the UILabel
+        self.timeLabel.text = "\(strMinutes):\(strSeconds)"
+
+    }
     //OTSubscriber delegate callbacks
     
     
     func subscriberDidConnectToStream(subscriber : OTSubscriberKit){
         println("subscriber did connect to stream")
         if tokSubscriber != nil {
+//            timer = NSTimer.scheduledTimerWithTimeInterval(15, target:self, invocation: Selector("checkTime"), repeats: true);
+            var startTime = NSDate.timeIntervalSinceReferenceDate()
+            timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("updateTime:"), userInfo: startTime, repeats: true)
+            
+            println(subscriber);
             let viewSize = CGSizeMake(view.frame.size.width, view.frame.size.height*0.5)
             tokSubscriber!.view.layer.cornerRadius = 7.5
             tokSubscriber!.view.clipsToBounds = true
             tokSubscriber!.view.frame = CGRectMake(0, 0, viewSize.width, viewSize.height)
+            
+            self.timeLabel = UILabel(frame: CGRectMake(viewSize.width/2, viewSize.height-20, viewSize.width, 40))
+            self.timeLabel.text = "00:00"
+            self.timeLabel.textColor = UIColor.whiteColor()
+            self.timeLabel.sizeToFit()
+            self.timeLabel.frame.origin = CGPointMake(viewSize.width/2 - self.timeLabel.frame.size.width/2, viewSize.height)
             view.insertSubview(tokSubscriber!.view, atIndex: 0)
+            view.insertSubview(self.timeLabel, atIndex: 10)
             waitingLabel.hidden = true
             
         }
