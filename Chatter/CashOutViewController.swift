@@ -91,7 +91,7 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
     }
 
     @IBAction func cashOutButtonPressed(sender: AnyObject) {
-        if(self.isEnteringBankInfo) {
+        if(self.isEnteringBankInfo && routingNumberTextField != nil && accountNumberTextField != nil) {
             if((routingNumberTextField.text.rangeOfString("^[0-9]{10,10}$", options: .RegularExpressionSearch)) != nil && (accountNumberTextField.text.rangeOfString("^[0-9]{10,10}$", options: .RegularExpressionSearch)) != nil) {
                 // 10 digit numbers for both
             } else if((routingNumberTextField.text.rangeOfString("^[0-9]{10,10}$", options: .RegularExpressionSearch)) != nil && (accountNumberTextField.text.rangeOfString("^[0-9]{10,10}$", options: .RegularExpressionSearch)) == nil) {
