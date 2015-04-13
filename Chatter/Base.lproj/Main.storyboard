@@ -531,12 +531,60 @@
                         <outlet property="profilePhoto" destination="FfK-PA-hPw" id="GM9-Sj-EfH"/>
                         <segue destination="ohF-ep-JZT" kind="custom" identifier="logout" customClass="LogoutSegue" customModule="chatter" id="xhq-5l-pD4"/>
                         <segue destination="mCf-WK-dcZ" kind="push" identifier="editProfile" id="ltU-Sl-oXc"/>
-                        <segue destination="XS1-Or-8hc" kind="push" identifier="cashOut" id="eUZ-iM-vHU"/>
+                        <segue destination="ur1-mX-r6s" kind="push" identifier="cashOut" id="PII-Ii-Jad"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Al8-M2-abK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="479" y="-1059"/>
+        </scene>
+        <!--Cash Out View Controller-->
+        <scene sceneID="CbG-ho-Hws">
+            <objects>
+                <viewController id="ur1-mX-r6s" customClass="CashOutViewController" customModule="chatter" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Ad0-JI-aa3">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ChatterBG@3x.jpg" id="eGJ-g8-LOi">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Gradient@3x.png" id="XSe-hB-mEI">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="uYi-hF-5NB">
+                                <rect key="frame" x="16" y="508" width="288" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                <state key="normal" title="Cash Out">
+                                    <color key="titleColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="cashOutButtonPressed:" destination="ur1-mX-r6s" eventType="touchUpInside" id="MzO-zB-H6R"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You have XXX credits. Cash out now for XXX dollars" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="fpR-n3-bGi">
+                                <rect key="frame" x="16" y="443" width="288" height="57"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="6BJ-FX-pFJ"/>
+                    <connections>
+                        <outlet property="cashOutButton" destination="uYi-hF-5NB" id="DDa-C6-q2T"/>
+                        <outlet property="creditLabel" destination="fpR-n3-bGi" id="lUu-0E-yoD"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jkn-DY-BYw" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="821" y="-1519"/>
         </scene>
         <!--Stripe Card View Controller-->
         <scene sceneID="Jyh-iU-ojN">
@@ -548,7 +596,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="creditCardCell" rowHeight="120" id="7rG-2K-JHL">
-                                <rect key="frame" x="0.0" y="86" width="320" height="120"/>
+                                <rect key="frame" x="0.0" y="22" width="320" height="120"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7rG-2K-JHL" id="IYO-la-fR0">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="119"/>
@@ -624,8 +672,8 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="jk5-n6-jBi"/>
-        <segue reference="imo-Ua-hqb"/>
         <segue reference="ltU-Sl-oXc"/>
+        <segue reference="NbL-Ww-bGK"/>
+        <segue reference="jk5-n6-jBi"/>
     </inferredMetricsTieBreakers>
 </document>
