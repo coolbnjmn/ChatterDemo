@@ -53,7 +53,7 @@ var createStripeCustomer = function(request, response) {
 
 }
 
-Parse.Cloud.define("addCard", function(request, response) {
+Parse.Cloud.define("addPaymentSource", function(request, response) {
     console.log(request.params);
     var userObjectId = request.params.userObjectId;
     var StripeCustomer = Parse.Object.extend("StripeCustomer");

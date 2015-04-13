@@ -38,6 +38,14 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
                 text += " credits. Cash out now for XXX dollars"
                 self.creditLabel.text = text
                 self.isEnteringBankInfo = false
+                if(self.routingNumberTextField != nil) {
+                    self.routingNumberTextField.removeFromSuperview()
+                }
+                if(self.accountNumberTextField != nil) {
+                    self.accountNumberTextField.removeFromSuperview()
+                }
+                self.cashOutButton.setTitle("Cash Out", forState: UIControlState.allZeros)
+
             }
             
         })
@@ -92,9 +100,50 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
 
     @IBAction func cashOutButtonPressed(sender: AnyObject) {
         if(self.isEnteringBankInfo && routingNumberTextField != nil && accountNumberTextField != nil) {
-            if((routingNumberTextField.text.rangeOfString("^[0-9]{10,10}$", options: .RegularExpressionSearch)) != nil && (accountNumberTextField.text.rangeOfString("^[0-9]{10,10}$", options: .RegularExpressionSearch)) != nil) {
-                // 10 digit numbers for both
-            } else if((routingNumberTextField.text.rangeOfString("^[0-9]{10,10}$", options: .RegularExpressionSearch)) != nil && (accountNumberTextField.text.rangeOfString("^[0-9]{10,10}$", options: .RegularExpressionSearch)) == nil) {
+            routingNumberTextField.backgroundColor = UIColor.whiteColor()
+            accountNumberTextField.backgroundColor = UIColor.whiteColor()
+            
+            if((routingNumberTextField.text.rangeOfString("^[0-9]{9,9}$", options: .RegularExpressionSearch)) != nil && (accountNumberTextField.text.rangeOfString("^[0-9]{12,12}$", options: .RegularExpressionSearch)) != nil) {
+                SVProgressHUD.showWithStatus("Adding Bank Account")
+                // 9 digit numbers for routing, 10 for account
+                // make new stripe customer with banking info
+                let completion : STPCompletionBlock = { [weak self] (token: STPToken!, error: NSError!) in
+                    let wSelf = self
+                    
+                    println("#######")
+                    if(error == nil) {
+                        // call cloud function
+                        println(token)
+                        let params = NSMutableDictionary()
+                        params.setValue(token.tokenId, forKey: "token")
+                        params.setValue(PFUser.currentUser().objectId, forKey: "userObjectId")
+                        let block : (AnyObject!, NSError!) -> Void = {
+                            (results: AnyObject!, error: NSError!) in
+                            println("********")
+                            if(error == nil) {
+                                println(results)
+                                SVProgressHUD.dismiss()
+                                wSelf?.viewDidLoad()
+                            } else {
+                                println(error)
+                            }
+                            println("********")
+                        }
+                        PFCloud.callFunctionInBackground("addPaymentSource", withParameters:params as [NSObject : AnyObject], block: block)
+                        
+                    } else {
+                        print(error)
+                    }
+                    println("#######")
+                    
+                }
+                let bankAccount = STPBankAccount()
+                bankAccount.routingNumber = routingNumberTextField.text
+                bankAccount.accountNumber = accountNumberTextField.text
+                bankAccount.country = "US"
+                
+                STPAPIClient.sharedClient().createTokenWithBankAccount(bankAccount, completion: completion)
+            } else if((routingNumberTextField.text.rangeOfString("^[0-9]{9,9}$", options: .RegularExpressionSearch)) != nil && (accountNumberTextField.text.rangeOfString("^[0-9]{12,12}$", options: .RegularExpressionSearch)) == nil) {
                 let animation = CABasicAnimation(keyPath: "position")
                 animation.duration = 0.07
                 animation.repeatCount = 4
@@ -104,7 +153,7 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
                 accountNumberTextField.layer.addAnimation(animation, forKey: "position")
 
                 accountNumberTextField.backgroundColor = UIColor.redColor()
-            } else if((routingNumberTextField.text.rangeOfString("^[0-9]{10,10}$", options: .RegularExpressionSearch)) == nil && (accountNumberTextField.text.rangeOfString("^[0-9]{10,10}$", options: .RegularExpressionSearch)) != nil) {
+            } else if((routingNumberTextField.text.rangeOfString("^[0-9]{9,9}$", options: .RegularExpressionSearch)) == nil && (accountNumberTextField.text.rangeOfString("^[0-9]{12,12}$", options: .RegularExpressionSearch)) != nil) {
                 let animation = CABasicAnimation(keyPath: "position")
                 animation.duration = 0.07
                 animation.repeatCount = 4
