@@ -21,6 +21,8 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.navigationController?.navigationBar.barTintColor = UIColor.clearColor()
+        self.navigationController?.navigationBar.tintColor = UIColor.init(red:41/255.0, green:185/255.0, blue:76/255.0, alpha:1.0)
         // Do any additional setup after loading the view.
         var stripeQuery : PFQuery = PFQuery(className: "StripeCustomer")
         stripeQuery.whereKey("userObj", equalTo: PFUser.currentUser().objectId)
@@ -51,6 +53,11 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
         })
     }
 
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.navigationBar.tintColor = UIColor.blueColor()
+        self.navigationController?.navigationBar.barTintColor = UIColor.init(red:41/255.0, green:185/255.0, blue:76/255.0, alpha:1.0)
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -122,7 +129,7 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
                             println("********")
                             if(error == nil) {
                                 println(results)
-                                SVProgressHUD.dismiss()
+                                SVProgressHUD.showSuccessWithStatus("Success!")
                                 wSelf?.viewDidLoad()
                             } else {
                                 println(error)
@@ -133,6 +140,12 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
                         
                     } else {
                         print(error)
+                        let alert = UIAlertView()
+                        alert.title = "Invalid Bank Account Info"
+                        alert.message = "Please try again."
+                        alert.addButtonWithTitle("Ok")
+                        alert.show()
+                        SVProgressHUD.dismiss()
                     }
                     println("#######")
                     
