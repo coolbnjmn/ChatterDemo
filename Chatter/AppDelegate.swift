@@ -53,7 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //Parse.setApplicationId("", clientKey: "")
         
         PFFacebookUtils.initializeFacebook();
-        Stripe.setDefaultPublishableKey("pk_live_6iwDAqFNTbmj0TEMjxtFExz4")
+        Stripe.setDefaultPublishableKey("pk_test_OGoH1EdkbuxaoK41abnCYnto")
         PFAnalytics.trackAppOpenedWithLaunchOptionsInBackground(launchOptions, block: nil)
         
         let defaults = NSUserDefaults.standardUserDefaults()

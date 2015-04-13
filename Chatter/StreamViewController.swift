@@ -173,14 +173,14 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
             showAlert(error!.localizedDescription)
         }
         
-        let viewSize = CGSizeMake(view.frame.size.width, view.frame.size.height*0.5)
+        let viewSize = CGSizeMake(view.frame.size.width*0.25, view.frame.size.height*0.25)
         userView = tokPublisher!.view
         
         if userView != nil {
             userView!.layer.cornerRadius = 7.5
             userView!.clipsToBounds = true
             view.insertSubview(userView!, atIndex: 0)
-            userView!.frame = CGRectMake(0, viewSize.height, viewSize.width, viewSize.height);
+            userView!.frame = CGRectMake(view.frame.size.width - viewSize.width - 10, view.frame.size.height - viewSize.height - 10, viewSize.width, viewSize.height);
 //            userView!.center = CGPointMake(view.frame.size.width*0.5,
 //                                           view.frame.size.height*0.5)
         }
@@ -308,16 +308,20 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
             timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("updateTime:"), userInfo: startTime, repeats: true)
             
             println(subscriber);
-            let viewSize = CGSizeMake(view.frame.size.width, view.frame.size.height*0.5)
+            let viewSize = CGSizeMake(view.frame.size.width, view.frame.size.height)
             tokSubscriber!.view.layer.cornerRadius = 7.5
             tokSubscriber!.view.clipsToBounds = true
             tokSubscriber!.view.frame = CGRectMake(0, 0, viewSize.width, viewSize.height)
             
-            self.timeLabel = UILabel(frame: CGRectMake(viewSize.width/2, viewSize.height-20, viewSize.width, 40))
+            var timeLabelViewSize = CGSizeMake(view.frame.size.width*0.25, view.frame.size.height*0.25)
+            self.timeLabel = UILabel()
+            self.timeLabel.frame = CGRectMake(view.frame.size.width - timeLabelViewSize.width,view.frame.size.height - timeLabelViewSize.height,timeLabelViewSize.width, CGFloat(40))
+            
             self.timeLabel.text = "00:00"
             self.timeLabel.textColor = UIColor.whiteColor()
             self.timeLabel.sizeToFit()
-            self.timeLabel.frame.origin = CGPointMake(viewSize.width/2 - self.timeLabel.frame.size.width/2, viewSize.height)
+            self.timeLabel.textAlignment = .Center
+//            self.timeLabel.frame.origin = CGPointMake(timeLabelViewSize.width/2 - self.timeLabel.frame.size.width/2, 40)
             view.insertSubview(tokSubscriber!.view, atIndex: 0)
             view.insertSubview(self.timeLabel, atIndex: 10)
             waitingLabel.hidden = true

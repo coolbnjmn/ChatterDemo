@@ -372,7 +372,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="editProfileCell" rowHeight="44" id="8NS-0t-3bE" customClass="EditProfileCell" customModule="chatter" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8NS-0t-3bE" id="F6w-iK-UTM">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -509,14 +509,14 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <state key="normal" title="Edit Cards"/>
+                                <state key="normal" title="Cash Out"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                         <integer key="value" value="25"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <action selector="editCards:" destination="ZuF-VC-Fqt" eventType="touchUpInside" id="e97-1G-PnM"/>
+                                    <action selector="cashOut:" destination="ZuF-VC-Fqt" eventType="touchUpInside" id="2U0-gv-jqy"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -525,13 +525,13 @@
                     <navigationItem key="navigationItem" id="4bU-Ar-MzO"/>
                     <connections>
                         <outlet property="applePayButton" destination="Fd5-K9-tWz" id="dHJ-SY-Kih"/>
+                        <outlet property="cashOutButton" destination="VJn-9K-W3M" id="lf3-j7-8ln"/>
                         <outlet property="coverPhoto" destination="haJ-am-hmH" id="k37-E7-N81"/>
-                        <outlet property="editCards" destination="VJn-9K-W3M" id="TBZ-Oa-ddx"/>
                         <outlet property="logoutButton" destination="hCJ-j1-oFz" id="ku9-N2-K2e"/>
                         <outlet property="profilePhoto" destination="FfK-PA-hPw" id="GM9-Sj-EfH"/>
                         <segue destination="ohF-ep-JZT" kind="custom" identifier="logout" customClass="LogoutSegue" customModule="chatter" id="xhq-5l-pD4"/>
                         <segue destination="mCf-WK-dcZ" kind="push" identifier="editProfile" id="ltU-Sl-oXc"/>
-                        <segue destination="XS1-Or-8hc" kind="push" identifier="showCards" id="eUZ-iM-vHU"/>
+                        <segue destination="XS1-Or-8hc" kind="push" identifier="cashOut" id="eUZ-iM-vHU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Al8-M2-abK" userLabel="First Responder" sceneMemberID="firstResponder"/>

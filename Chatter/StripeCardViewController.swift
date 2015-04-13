@@ -10,8 +10,8 @@ import UIKit
 import Parse
 
 
-class StripeCardViewController: UITableViewController, PTKViewDelegate {
-    
+class StripeCardViewController: UITableViewController, PTKViewDelegate, UITextFieldDelegate {
+    let textFieldHeight : CGFloat = 40
     var cardsArray : NSMutableArray = NSMutableArray()
     var stripeView : PTKView = PTKView()
     override func viewDidLoad() {
@@ -25,6 +25,9 @@ class StripeCardViewController: UITableViewController, PTKViewDelegate {
                 println(array.count)
         
         })
+        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Save, target: self, action: "addCard:")
+        
         self.tableView.registerClass(UITableViewCell.classForCoder(), forCellReuseIdentifier: "creditCardCell")
     }
     
@@ -37,7 +40,7 @@ class StripeCardViewController: UITableViewController, PTKViewDelegate {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete method implementation.
         // Return the number of rows in the section.
-        return cardsArray.count+1
+        return cardsArray.count+2
         
     }
     
@@ -49,21 +52,36 @@ class StripeCardViewController: UITableViewController, PTKViewDelegate {
             stripeView = PTKView(frame: CGRectMake(xOffset, 20, 290, 55))
             stripeView.delegate = self
             cell.addSubview(stripeView)
+        } else if(indexPath.row == cardsArray.count+1) {
+            cell.frame.size.height = textFieldHeight * 3
+            let routingNumberTextField = UITextField(frame: CGRectMake(0, 0, cell.bounds.size.width, textFieldHeight))
+            let accountNumberTextField = UITextField(frame: CGRectMake(0, textFieldHeight, cell.bounds.size.width, textFieldHeight))
+            routingNumberTextField.placeholder = "Routing Number"
+            accountNumberTextField.placeholder = "Account Number"
+            routingNumberTextField.keyboardType = UIKeyboardType.NumberPad
+            accountNumberTextField.keyboardType = UIKeyboardType.NumberPad
             
-//            var doneButton = UIButton(frame: CGRectMake(cell.bounds.size.width - 110, 80, 100, 25))
-            var doneButton = UIButton.buttonWithType(UIButtonType.Custom) as! UIButton
-            doneButton.frame = CGRectMake(cell.bounds.size.width - 110, 80, 100, 25)
-            doneButton.backgroundColor = UIColor.blueColor()
-            doneButton.tintColor = UIColor.whiteColor()
-            doneButton.titleLabel?.text = "Add Card"
+            routingNumberTextField.borderStyle = .RoundedRect
+            accountNumberTextField.borderStyle = .RoundedRect
+            
+            routingNumberTextField.textAlignment = .Center
+            accountNumberTextField.textAlignment = .Center
+            routingNumberTextField.delegate = self
+            accountNumberTextField.delegate = self
+            routingNumberTextField.tag = 1
+            accountNumberTextField.tag = 2
+            
+            let doneButton = UIButton(frame: CGRectMake(0, textFieldHeight*2, cell.bounds.size.width, textFieldHeight))
+            doneButton.backgroundColor = UIColor.redColor()
             doneButton.titleLabel?.textAlignment = .Center
-            doneButton.layer.borderWidth = 1.5
-            doneButton.layer.borderColor = UIColor.blackColor().CGColor
-            doneButton.layer.cornerRadius = 15
-            doneButton.addTarget(self, action: "addCard:", forControlEvents: UIControlEvents.TouchUpInside)
-//            doneButton.enabled = true
-            
+            doneButton.setTitle("Submit Banking Information -- This won't leave your device", forState: UIControlState.allZeros)
+            doneButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+            doneButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Highlighted)
+
+            doneButton.addTarget(self, action: "submitBanking:", forControlEvents: .TouchUpInside)
             cell.addSubview(doneButton)
+            cell.addSubview(routingNumberTextField)
+            cell.addSubview(accountNumberTextField)
         }
 
         return cell
@@ -79,87 +97,79 @@ class StripeCardViewController: UITableViewController, PTKViewDelegate {
         // Dispose of any resources that can be recreated.
     }
     
+    func submitBanking(sender: AnyObject) {
+        println("submit banking")
+    }
     func addCard(sender: AnyObject) {
         println("addCard")
-//        var params : NSMutableDictionary = NSMutableDictionary()
-//        params.setValue(stripeView.card.number, forKey:"card_number")
-//        params.setValue(stripeView.card.cvc, forKey: "card_cvc")
-//        params.setValue(stripeView.card.expMonth, forKey: "card_exp_month")
-//        params.setValue(stripeView.card.expYear, forKey: "card_exp_year")
-//
-//        
+        let card : PTKCard = stripeView.card
         let completion : STPCompletionBlock = { [weak self] (token: STPToken!, error: NSError!) in
             let wSelf = self
-            if(error == nil) {
-                var params : NSMutableDictionary = NSMutableDictionary()
-                params.setValue(token.tokenId, forKey: "cardToken")
-                params.setValue(PFUser.currentUser().objectId, forKey: "objectId")
-                
-                let block : PFIdResultBlock = { [weak self] (result: AnyObject!, error: NSError!) in
-                    let wSelf = self
-                    if(error == nil) {
-                        // no error
-                        var cardQuery = PFQuery(className: "Cards")
-                        cardQuery.whereKey("user", equalTo: PFUser.currentUser())
-                        cardQuery.findObjectsInBackgroundWithBlock({ (NSArray array, NSError error) -> Void in
-                            println(array.count)
-                            wSelf!.cardsArray = NSMutableArray(array:array)
-                            
-                            wSelf!.tableView.reloadData()
-                            
-                            
-                        })
-                    } else {
-                        // verification code was incorrect
-                    }
-                }
-                PFCloud.callFunctionInBackground("saveCardInformation", withParameters: params as [NSObject : AnyObject], block: block)
-            } else {
-                println("uh oh")
-                println(error)
-            }
             
+            println("#######")
+            if(error == nil) {
+                // call cloud function
+                println(token)
+                let params = NSMutableDictionary()
+                params.setValue(token.tokenId, forKey: "token")
+                params.setValue(PFUser.currentUser().objectId, forKey: "userObjectId")
+                let block : (AnyObject!, NSError!) -> Void = {
+                    (results: AnyObject!, error: NSError!) in
+                    println("********")
+                    if(error == nil) {
+                        println(results)
+                    } else {
+                        println(error)
+                    }
+                    println("********")
+                }
+                PFCloud.callFunctionInBackground("addCard", withParameters:params as [NSObject : AnyObject], block: block)
+                
+            } else {
+                print(error)
+            }
+            println("#######")
+
+        }
+        var finalCard : STPCard = STPCard()
+        finalCard.number = card.number
+        finalCard.expMonth = card.expMonth
+        finalCard.expYear = card.expYear
+        finalCard.cvc = card.cvc
+        STPAPIClient.sharedClient().createTokenWithCard(finalCard, completion:completion)
+
+    }
+
+    func paymentView(paymentView: PTKView!, withCard card: PTKCard!, isValid valid: Bool) {
+        println("changing validity of button")
+        self.navigationItem.rightBarButtonItem?.enabled = valid
+    }
+    
+    func textFieldShouldEndEditing(textField: UITextField) -> Bool {
+        let text : String! = textField.text
+        if(textField.tag == 1) { // routing number
+            if((text.rangeOfString("^[0-9]{10,10}$", options: .RegularExpressionSearch)) != nil) {
+                // match
+                println("regex match for routing number")
+                return true
+            }
+        } else if(textField.tag == 2) { // account number
+            if((text.rangeOfString("^[0-9]{10,10}$", options: .RegularExpressionSearch)) != nil) {
+                // match
+                println("regex match for account number")
+                return true
+            }
         }
         
-        let stpcard : STPCard = STPCard()
-        stpcard.number = stripeView.card.number
-        stpcard.expMonth = stripeView.card.expMonth
-        stpcard.expYear = stripeView.card.expYear
-        stpcard.cvc = stripeView.card.cvc
-        
-        println(stpcard.number)
-        STPAPIClient.sharedClient().createTokenWithCard(stpcard, completion:completion)
-
-        
-//        let block : PFIdResultBlock = { [weak self] (result: AnyObject!, error: NSError!) in
-//            let wSelf = self
-//            if(error == nil) {
-//                // no error
-//                var cardQuery = PFQuery(className: "Cards")
-//                cardQuery.whereKey("user", equalTo: PFUser.currentUser())
-//                cardQuery.findObjectsInBackgroundWithBlock({ (NSArray array, NSError error) -> Void in
-//                    println(array.count)
-//                    wSelf!.cardsArray = NSMutableArray(array:array)
-//                    
-//                    wSelf!.tableView.reloadData()
-//
-//                    
-//                })
-//            } else {
-//                // verification code was incorrect
-//            }
-//        }
-//        PFCloud.callFunctionInBackground("addCreditCard", withParameters: params, block: block)
-        
+        let animation = CABasicAnimation(keyPath: "position")
+        animation.duration = 0.07
+        animation.repeatCount = 4
+        animation.autoreverses = true
+        animation.fromValue = NSValue(CGPoint: CGPointMake(textField.center.x - 10, textField.center.y))
+        animation.toValue = NSValue(CGPoint: CGPointMake(textField.center.x + 10, textField.center.y))
+        textField.layer.addAnimation(animation, forKey: "position")
+        return false
     }
-    /*
-    // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

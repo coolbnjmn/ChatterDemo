@@ -38,7 +38,7 @@ class ProfileViewController : UIViewController , SKProductsRequestDelegate, SKPa
     @IBOutlet weak var profilePhoto: UIImageView!
     @IBOutlet weak var coverPhoto: UIImageView!
     @IBOutlet weak var logoutButton: UIButton!
-    @IBOutlet weak var editCards: UIButton!
+    @IBOutlet weak var cashOutButton: UIButton!
     @IBOutlet weak var applePayButton: UIButton!
     
     var product_id: NSString?
@@ -67,9 +67,9 @@ class ProfileViewController : UIViewController , SKProductsRequestDelegate, SKPa
         applePayButton.imageView?.frame = CGRectMake(0,0,applePayButton.frame.size.width, applePayButton.frame.size.height)
 
 
-        editCards.frame = CGRectMake(10, self.view.bounds.size.height - 230, self.view.bounds.size.width-20, 50)
-        editCards.layer.borderWidth = 2
-        editCards.layer.cornerRadius = logoutButton.frame.size.height * 0.5
+        cashOutButton.frame = CGRectMake(10, self.view.bounds.size.height - 230, self.view.bounds.size.width-20, 50)
+        cashOutButton.layer.borderWidth = 2
+        cashOutButton.layer.cornerRadius = logoutButton.frame.size.height * 0.5
         
         var facebookId = PFUser.currentUser().objectForKey("facebookId") as! String
         var imageURLString = "http://graph.facebook.com/" + facebookId + "/picture?type=large"
@@ -151,8 +151,8 @@ class ProfileViewController : UIViewController , SKProductsRequestDelegate, SKPa
         performSegueWithIdentifier("logout", sender: self)
     }
     
-    @IBAction func editCards(sender: AnyObject) {
-        performSegueWithIdentifier("showCards", sender: self)
+    @IBAction func cashOut(sender: AnyObject) {
+        performSegueWithIdentifier("cashOut", sender: self)
     }
     
     func editProfileButtonTapped(sender: AnyObject) {
