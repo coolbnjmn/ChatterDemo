@@ -70,7 +70,6 @@ class LobbyViewController : UIViewController {
     }
     
     @IBAction func startNewChat(sender: AnyObject) {
-        
         performSegueWithIdentifier("startNewChat", sender: sender)
     }
     

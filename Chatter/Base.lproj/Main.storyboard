@@ -192,7 +192,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hgY-gF-Gm4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="364" y="749.5"/>
+            <point key="canvasLocation" x="466" y="768.5"/>
         </scene>
         <!--Chat Details View Controller-->
         <scene sceneID="MvT-zv-H7m">
@@ -219,17 +219,38 @@
                                     <action selector="joinChat:" destination="vB4-bI-se3" eventType="touchUpInside" id="mnB-Su-wH8"/>
                                 </connections>
                             </button>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="dlE-N0-ZN0">
+                                <rect key="frame" x="0.0" y="82" width="320" height="208"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="bidCell" id="aGW-88-Oh9">
+                                        <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="aGW-88-Oh9" id="7fg-aH-mQC">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="vB4-bI-se3" id="YWc-5L-7Nc"/>
+                                    <outlet property="delegate" destination="vB4-bI-se3" id="4bj-9L-IgJ"/>
+                                </connections>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="a2u-HJ-9dp"/>
                     <connections>
+                        <outlet property="bidTableView" destination="dlE-N0-ZN0" id="CgW-Mx-cS9"/>
+                        <outlet property="joinChatButton" destination="r4L-vr-9xo" id="sSZ-z1-Pa1"/>
                         <segue destination="d73-JW-7V1" kind="custom" identifier="enterStream" customClass="ChatEntrySegue" customModule="chatter" customModuleProvider="target" id="6hr-HG-E7O"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GeI-uL-6G7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="821" y="750"/>
+            <point key="canvasLocation" x="821" y="749.5"/>
         </scene>
         <!--Chatter-->
         <scene sceneID="Ykf-DK-FOa">
@@ -672,8 +693,8 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="ltU-Sl-oXc"/>
+        <segue reference="qaH-QU-QHn"/>
+        <segue reference="6hr-HG-E7O"/>
         <segue reference="NbL-Ww-bGK"/>
-        <segue reference="jk5-n6-jBi"/>
     </inferredMetricsTieBreakers>
 </document>
