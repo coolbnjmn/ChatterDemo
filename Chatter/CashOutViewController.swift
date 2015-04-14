@@ -51,6 +51,11 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
             }
             
         })
+        
+        let buttonHeight : CGFloat = 50
+        let buttonOffset : CGFloat = 10
+        self.cashOutButton.frame = CGRectMake(0, self.view.bounds.size.height - buttonHeight, self.view.bounds.size.width, buttonHeight)
+        self.creditLabel.frame = CGRectMake(0, self.view.bounds.size.height - buttonHeight*3 - buttonOffset, self.view.bounds.size.width, buttonHeight*2)
     }
 
     override func viewWillDisappear(animated: Bool) {

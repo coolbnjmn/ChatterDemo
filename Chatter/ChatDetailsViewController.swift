@@ -37,6 +37,7 @@ class ChatDetailsViewController : UIViewController, UITableViewDelegate, UITable
     
     var session : PFObject!
     var bidTextField : UITextField!
+    var sessionBids : NSMutableArray!
     
     @IBOutlet weak var bidTableView: UITableView!
     
@@ -50,6 +51,23 @@ class ChatDetailsViewController : UIViewController, UITableViewDelegate, UITable
         let tableViewHeight : CGFloat = 300
         let bufferSize : CGFloat = 20
         self.bidTableView.frame = CGRectMake(0, self.view.bounds.size.height - tableViewHeight - joinChatButton.frame.size.height - bufferSize, self.view.bounds.size.width, tableViewHeight)
+        
+        let buttonTextFieldOffset : CGFloat = 10
+        let buttonWidth : CGFloat = self.view.bounds.size.width / 3
+        let buttonHeight : CGFloat = 65
+        bidTextField = UITextField()
+        bidTextField.frame = CGRectMake(0, self.view.bounds.size.height - tableViewHeight - joinChatButton.frame.size.height - bufferSize * 2 - buttonHeight, 2 * self.view.bounds.size.width / 3, buttonHeight)
+        bidTextField.borderStyle = .RoundedRect
+        bidTextField.keyboardType = .NumberPad
+        let addBidButton : UIButton = UIButton(frame: CGRectMake(self.view.bounds.size.width - buttonWidth, self.view.bounds.size.height - tableViewHeight - joinChatButton.frame.size.height - bufferSize * 2 - buttonHeight, buttonWidth, buttonHeight))
+        addBidButton.backgroundColor = UIColor.redColor()
+        addBidButton.setTitle("Add Bid", forState:.allZeros)
+        addBidButton.setTitleColor(UIColor.whiteColor(), forState:.allZeros)
+        addBidButton.addTarget(self, action: "addBid:", forControlEvents: .TouchUpInside)
+        
+        self.view.addSubview(addBidButton)
+        self.view.addSubview(bidTextField)
+        self.bidTableView.reloadData()
 
     }
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -69,39 +87,19 @@ class ChatDetailsViewController : UIViewController, UITableViewDelegate, UITable
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete method implementation.
-        // Return the number of rows in the section.
-        let sessionBids : NSArray = NSArray()
-        return sessionBids.count+1
-        
+        if(sessionBids == nil) {
+            return 0
+        }
+        return sessionBids.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("bidCell", forIndexPath: indexPath) as! UITableViewCell
-        let sessionBids : NSArray = NSArray()
-        if(indexPath.row == sessionBids.count) {
-            // add bid view
-            let buttonTextFieldOffset : CGFloat = 10
-            let buttonWidth : CGFloat = cell.bounds.size.width / 3
-            bidTextField = UITextField()
-            bidTextField.frame = CGRectMake(cell.frame.origin.x, cell.frame.origin.y, 2 * cell.bounds.size.width / 3, cell.frame.size.height)
-            bidTextField.borderStyle = .RoundedRect
-            
-            let addBidButton : UIButton = UIButton(frame: CGRectMake(cell.bounds.size.width - buttonWidth, cell.frame.origin.y, buttonWidth, cell.frame.size.height))
-            addBidButton.backgroundColor = UIColor.redColor()
-            addBidButton.titleLabel?.text = "Add Bid"
-            addBidButton.titleLabel?.textColor = UIColor.whiteColor()
-            addBidButton.addTarget(self, action: "addBid:", forControlEvents: .TouchUpInside)
-            
-            cell.addSubview(addBidButton)
-            cell.addSubview(bidTextField)
-            
-        } else {
-            let bid : NSDictionary = sessionBids.objectAtIndex(indexPath.row) as! NSDictionary
-            cell.textLabel?.text = bid.objectForKey("name") as? String
-            cell.detailTextLabel?.text = bid.objectForKey("bid") as? String
+        if(sessionBids != nil && sessionBids.count != 0) {
+            let bid : NSDictionary = sessionBids.objectAtIndex(sessionBids.count - indexPath.row - 1) as! NSDictionary
+            cell.detailTextLabel?.text = bid.objectForKey("name") as? String
+            cell.textLabel?.text = bid.objectForKey("bid") as? String
         }
-        
         return cell
     }
     
@@ -109,9 +107,36 @@ class ChatDetailsViewController : UIViewController, UITableViewDelegate, UITable
         self.bidTableView.deselectRowAtIndexPath(indexPath, animated:false)
     }
     
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+        if(bidTextField != nil) {
+            bidTextField.resignFirstResponder()
+        }
+        
+    }
     
     func addBid(sender: AnyObject) {
         println("add bid")
+        sessionBids = session.objectForKey("bids") as? NSMutableArray
+        if(sessionBids == nil) {
+            sessionBids = NSMutableArray()
+        }
+        
+        var lastSessionBid : NSDictionary
+        if(sessionBids.count != 0) {
+            lastSessionBid = sessionBids.objectAtIndex(sessionBids.count - 1) as! NSDictionary
+            var previousHighBid : Int! = (lastSessionBid.objectForKey("bid") as! String).toInt()
+            if( previousHighBid >= bidTextField.text.toInt()) {
+                println("bid is lower than current bid")
+                SVProgressHUD.showErrorWithStatus("Bid is lower than current bid!")
+                return
+            }
+        }
+        
+        sessionBids!.addObject(NSDictionary(objects: [PFUser.currentUser().objectId, PFUser.currentUser().objectForKey("username"), bidTextField.text], forKeys: ["user", "name", "bid"]))
+        session.setObject(sessionBids, forKey: "bids")
+        session.save()
+        self.bidTableView.reloadData()
+        
     }
     
     
