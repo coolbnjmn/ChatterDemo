@@ -32,7 +32,6 @@
 #ifndef Chatter_Chatter_Bridging_Header_h
 #define Chatter_Chatter_Bridging_Header_h
 
-
 #import <ParseFacebookUtils/PFFacebookUtils.h>
 #import <SVProgressHUD/SVProgressHUD.h>
 #import "ECSlidingViewController.h"

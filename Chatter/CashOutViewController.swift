@@ -22,7 +22,8 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
         super.viewDidLoad()
 
         self.navigationController?.navigationBar.barTintColor = UIColor.clearColor()
-        self.navigationController?.navigationBar.tintColor = UIColor.init(red:41/255.0, green:185/255.0, blue:76/255.0, alpha:1.0)
+        self.navigationController?.navigationBar.tintColor = UIColor.init(red:75/255.0, green:193/255.0, blue:210/255.0, alpha:1.0)
+        
         // Do any additional setup after loading the view.
         var stripeQuery : PFQuery = PFQuery(className: "StripeCustomer")
         stripeQuery.whereKey("userObj", equalTo: PFUser.currentUser().objectId)
@@ -56,12 +57,13 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
         let buttonOffset : CGFloat = 10
         self.cashOutButton.frame = CGRectMake(0, self.view.bounds.size.height - buttonHeight, self.view.bounds.size.width, buttonHeight)
         self.creditLabel.frame = CGRectMake(0, self.view.bounds.size.height - buttonHeight*3 - buttonOffset, self.view.bounds.size.width, buttonHeight*2)
+        self.view.backgroundColor = UIColor.init(red: 14/255.0, green: 14/255.0, blue: 14/255.0, alpha:0.5)
     }
 
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        self.navigationController?.navigationBar.tintColor = UIColor.blueColor()
-        self.navigationController?.navigationBar.barTintColor = UIColor.init(red:41/255.0, green:185/255.0, blue:76/255.0, alpha:1.0)
+        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
+        self.navigationController?.navigationBar.barTintColor = UIColor.init(red:75/255.0, green:193/255.0, blue:210/255.0, alpha:1.0)
     }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -93,8 +95,10 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
         routingNumberTextField.keyboardType = UIKeyboardType.NumberPad
         accountNumberTextField.keyboardType = UIKeyboardType.NumberPad
         
-        routingNumberTextField.font = UIFont(name: "Standard", size: 32)
-        accountNumberTextField.font = UIFont(name: "Standard", size: 32)
+        routingNumberTextField.font = UIFont(name: "MyriadPro-Regular", size: 32)
+        accountNumberTextField.font = UIFont(name: "MyriadPro-Regular", size: 32)
+        routingNumberTextField.textColor = UIColor.whiteColor()
+        accountNumberTextField.textColor = UIColor.whiteColor()
         routingNumberTextField.borderStyle = .RoundedRect
         accountNumberTextField.borderStyle = .RoundedRect
         
@@ -105,6 +109,10 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
         routingNumberTextField.tag = 1
         accountNumberTextField.tag = 2
         
+        routingNumberTextField.backgroundColor = UIColor.init(red: 120/255.0, green: 120/255.0, blue: 120/255.0, alpha: 1.0)
+        accountNumberTextField.backgroundColor = UIColor.init(red: 120/255.0, green: 120/255.0, blue: 120/255.0, alpha: 1.0)
+
+        
         self.view.addSubview(accountNumberTextField)
         self.view.addSubview(routingNumberTextField)
 
@@ -112,9 +120,6 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
 
     @IBAction func cashOutButtonPressed(sender: AnyObject) {
         if(self.isEnteringBankInfo && routingNumberTextField != nil && accountNumberTextField != nil) {
-            routingNumberTextField.backgroundColor = UIColor.whiteColor()
-            accountNumberTextField.backgroundColor = UIColor.whiteColor()
-            
             if((routingNumberTextField.text.rangeOfString("^[0-9]{9,9}$", options: .RegularExpressionSearch)) != nil && (accountNumberTextField.text.rangeOfString("^[0-9]{12,12}$", options: .RegularExpressionSearch)) != nil) {
                 SVProgressHUD.showWithStatus("Adding Bank Account")
                 // 9 digit numbers for routing, 10 for account
@@ -170,7 +175,6 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
                 animation.toValue = NSValue(CGPoint: CGPointMake(accountNumberTextField.center.x + 10, accountNumberTextField.center.y))
                 accountNumberTextField.layer.addAnimation(animation, forKey: "position")
 
-                accountNumberTextField.backgroundColor = UIColor.redColor()
             } else if((routingNumberTextField.text.rangeOfString("^[0-9]{9,9}$", options: .RegularExpressionSearch)) == nil && (accountNumberTextField.text.rangeOfString("^[0-9]{12,12}$", options: .RegularExpressionSearch)) != nil) {
                 let animation = CABasicAnimation(keyPath: "position")
                 animation.duration = 0.07
@@ -180,7 +184,7 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
                 animation.toValue = NSValue(CGPoint: CGPointMake(routingNumberTextField.center.x + 10, routingNumberTextField.center.y))
                 routingNumberTextField.layer.addAnimation(animation, forKey: "position")
 
-                routingNumberTextField.backgroundColor = UIColor.redColor()
+
             } else {
                 let animation = CABasicAnimation(keyPath: "position")
                 animation.duration = 0.07
@@ -194,8 +198,6 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
                 animation.toValue = NSValue(CGPoint: CGPointMake(accountNumberTextField.center.x + 10, accountNumberTextField.center.y))
                 accountNumberTextField.layer.addAnimation(animation, forKey: "position")
                 
-                routingNumberTextField.backgroundColor = UIColor.redColor()
-                accountNumberTextField.backgroundColor = UIColor.redColor()
                 
             }
    

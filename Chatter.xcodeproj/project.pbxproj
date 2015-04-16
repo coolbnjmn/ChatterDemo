@@ -105,6 +105,7 @@
 		B26333531AD447F0004982C2 /* ApplePayBTN_32pt__black_logo_@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B26333521AD447F0004982C2 /* ApplePayBTN_32pt__black_logo_@3x.png */; };
 		B276A4301ADB9C9300837622 /* CashOutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B276A42F1ADB9C9300837622 /* CashOutViewController.swift */; };
 		B2C327741AD206EB008ED98B /* StripeCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C327731AD206EB008ED98B /* StripeCardViewController.swift */; };
+		B2EC4FC11ADF1BC100361596 /* MyriadPro-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = B2EC4FC01ADF1BC100361596 /* MyriadPro-Regular.otf */; };
 		B2F3B64C1AD2538B00F91DFC /* VerifyPhoneCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F3B64B1AD2538B00F91DFC /* VerifyPhoneCodeViewController.swift */; };
 		B2F405DA1AD23BB400A180AC /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F405D91AD23BB400A180AC /* EditProfileViewController.swift */; };
 		B2F405DC1AD2433000A180AC /* EditProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F405DB1AD2433000A180AC /* EditProfileCell.swift */; };
@@ -198,6 +199,7 @@
 		B26333521AD447F0004982C2 /* ApplePayBTN_32pt__black_logo_@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ApplePayBTN_32pt__black_logo_@3x.png"; sourceTree = "<group>"; };
 		B276A42F1ADB9C9300837622 /* CashOutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CashOutViewController.swift; sourceTree = "<group>"; };
 		B2C327731AD206EB008ED98B /* StripeCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StripeCardViewController.swift; sourceTree = "<group>"; };
+		B2EC4FC01ADF1BC100361596 /* MyriadPro-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "MyriadPro-Regular.otf"; path = "Chatter/MyriadPro-Regular.otf"; sourceTree = "<group>"; };
 		B2F3B64B1AD2538B00F91DFC /* VerifyPhoneCodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifyPhoneCodeViewController.swift; sourceTree = "<group>"; };
 		B2F405D91AD23BB400A180AC /* EditProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
 		B2F405DB1AD2433000A180AC /* EditProfileCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditProfileCell.swift; sourceTree = "<group>"; };
@@ -290,6 +292,7 @@
 		645863911A718A7E00551A0F = {
 			isa = PBXGroup;
 			children = (
+				B2EC4FC01ADF1BC100361596 /* MyriadPro-Regular.otf */,
 				640CA6201A8BFD360089BCB5 /* Chatter-Bridging-Header.h */,
 				6487BB4D1A9283AD00BE7D32 /* Podfile */,
 				645863BF1A718BFE00551A0F /* Frameworks */,
@@ -549,6 +552,7 @@
 				645863AA1A718A7E00551A0F /* LaunchScreen.xib in Resources */,
 				B26333531AD447F0004982C2 /* ApplePayBTN_32pt__black_logo_@3x.png in Resources */,
 				645863A71A718A7E00551A0F /* Images.xcassets in Resources */,
+				B2EC4FC11ADF1BC100361596 /* MyriadPro-Regular.otf in Resources */,
 				6458646F1A76D4D400551A0F /* Dots.png in Resources */,
 				647AE6ED1A8C24F1008A0418 /* Gradient@3x.png in Resources */,
 				645864701A76D4D400551A0F /* Dots@2x.png in Resources */,

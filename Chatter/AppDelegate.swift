@@ -34,7 +34,6 @@ import UIKit
 import Parse
 import ParseUI
 
-
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 

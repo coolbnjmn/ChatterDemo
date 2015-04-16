@@ -70,6 +70,10 @@ class ChatEntryViewController : UIViewController {
         
         // Add both effects to your view
         backgroundView.addMotionEffect(group)
+        
+        if(PFUser.currentUser()?.objectForKey("facebookId") != nil) {
+            self.FacebookLogin(self)
+        }
     }
     
 
