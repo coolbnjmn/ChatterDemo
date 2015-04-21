@@ -20,9 +20,6 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
     var isEnteringBankInfo : Bool = true
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.navigationController?.navigationBar.barTintColor = UIColor.clearColor()
-        self.navigationController?.navigationBar.tintColor = UIColor.init(red:75/255.0, green:193/255.0, blue:210/255.0, alpha:1.0)
         
         // Do any additional setup after loading the view.
         var stripeQuery : PFQuery = PFQuery(className: "StripeCustomer")

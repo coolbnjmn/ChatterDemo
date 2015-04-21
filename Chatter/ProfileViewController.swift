@@ -189,20 +189,20 @@ class ProfileViewController : UIViewController , SKProductsRequestDelegate, SKPa
     @IBAction func applePayButtonPressed(sender : AnyObject) {
         // apple pay stuff here
         println("button pressed")
-
-        if (SKPaymentQueue.canMakePayments())
-        {
-            var productIDArray: [AnyObject!] = ["10_credits", "55_credits", "110_credits", "270_credits", "530_credits"]
-            
-            var productID:NSSet = NSSet(array: productIDArray)
-            
-            var productsRequest:SKProductsRequest = SKProductsRequest(productIdentifiers: productID as Set<NSObject>);
-            productsRequest.delegate = self;
-            productsRequest.start();
-            println("Fething Products");
-        } else {
-            println("can not make purchases");
-        }
+        performSegueWithIdentifier("addCredits", sender: self)
+//        if (SKPaymentQueue.canMakePayments())
+//        {
+//            var productIDArray: [AnyObject!] = ["10_credits", "55_credits", "110_credits", "270_credits", "530_credits"]
+//            
+//            var productID:NSSet = NSSet(array: productIDArray)
+//            
+//            var productsRequest:SKProductsRequest = SKProductsRequest(productIdentifiers: productID as Set<NSObject>);
+//            productsRequest.delegate = self;
+//            productsRequest.start();
+//            println("Fething Products");
+//        } else {
+//            println("can not make purchases");
+//        }
     }
     func updateCreditLabel() {
         var creditStringObj : AnyObject? = PFUser.currentUser().objectForKey("credits")
@@ -345,8 +345,6 @@ class ProfileViewController : UIViewController , SKProductsRequestDelegate, SKPa
                     
                     self.updateCreditLabel()
                     SKPaymentQueue.defaultQueue().finishTransaction(transaction as! SKPaymentTransaction)
-                    self.dismissIAP(self)
-                    
                     break;
                 case .Failed:
                     println("Purchased Failed");

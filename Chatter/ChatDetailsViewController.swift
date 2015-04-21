@@ -35,12 +35,13 @@ import Parse
 
 class ChatDetailsViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
     
+    var keyboardShowing : Bool = false
     var session : PFObject!
     var bidTextField : UITextField!
     var addBidButton : UIButton!
     var sessionBids : NSMutableArray!
     var timer : NSTimer!
-    var bidWindow : CGFloat = 15*60 // 15 minutes @ 60 sec a min
+    var bidWindow : CGFloat = 10 // 15 minutes @ 60 sec a min
     
     @IBOutlet weak var bidTableView: UITableView!
     
@@ -51,7 +52,7 @@ class ChatDetailsViewController : UIViewController, UITableViewDelegate, UITable
     override func viewDidLoad() {
         super.viewDidLoad()
         let topBarHeight : CGFloat = self.navigationController!.navigationBar.frame.size.height + UIApplication.sharedApplication().statusBarFrame.size.height
-        self.bidTableView.frame.origin = CGPointMake(0.0, topBarHeight)
+        self.bidTableView.frame = CGRectMake(0.0, topBarHeight, self.view.bounds.size.width, self.view.bounds.size.height - topBarHeight)
         let buttonHeight : CGFloat = 40
         let bufferSize : CGFloat = 20
         let buttonTextFieldOffset : CGFloat = 10
@@ -75,6 +76,7 @@ class ChatDetailsViewController : UIViewController, UITableViewDelegate, UITable
     }
 
     func keyboardWillHide(notification: NSNotification) {
+        keyboardShowing = false
         let userInfoDict : NSDictionary = notification.userInfo!
         let rate : NSNumber = userInfoDict.objectForKey(UIKeyboardAnimationDurationUserInfoKey) as! NSNumber
         let theRate : NSTimeInterval = rate as! NSTimeInterval
@@ -86,6 +88,7 @@ class ChatDetailsViewController : UIViewController, UITableViewDelegate, UITable
     }
     
     func keyboardWillShow(notification: NSNotification) {
+        keyboardShowing = true
         println(notification.userInfo)
         let userInfoDict : NSDictionary = notification.userInfo!
         let keyboardSize = (userInfoDict[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.CGRectValue()
@@ -93,7 +96,7 @@ class ChatDetailsViewController : UIViewController, UITableViewDelegate, UITable
         
         var contentInsets = UIEdgeInsets()
         if(UIInterfaceOrientationIsPortrait(UIApplication.sharedApplication().statusBarOrientation)) {
-            contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize!.height)+64, 0.0)
+            contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize!.height), 0.0)
         } else {
             contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize!.width), 0.0)
         }
@@ -109,21 +112,44 @@ class ChatDetailsViewController : UIViewController, UITableViewDelegate, UITable
             
 
     func updateTime(sender: NSTimer) {
-        bidWindow--
-        var tempBidWindow : CGFloat = bidWindow
-        let minutes = UInt8(bidWindow / 60.0)
-        tempBidWindow -= CGFloat(minutes) * 60
-        let seconds = UInt8(tempBidWindow)
+        var currentTime = NSDate.timeIntervalSinceReferenceDate()
+        
+        //Find the difference between current time and start time.
+        var remainingTime: NSTimeInterval = (session.objectForKey("bidWindowClose") as! NSTimeInterval) - currentTime
+        
+//        bidWindow = remainingTime.
+        //calculate the minutes in elapsed time.
+        let minutes = UInt8(remainingTime / 60.0)
+        remainingTime -= (NSTimeInterval(minutes) * 60)
+        
+        //calculate the seconds in elapsed time.
+        let seconds = UInt8(remainingTime)
+        remainingTime -= NSTimeInterval(seconds)
+        
+        //add the leading zero for minutes, seconds and millseconds and store them as string constants
         let strMinutes = minutes > 9 ? String(minutes):"0" + String(minutes)
         let strSeconds = seconds > 9 ? String(seconds):"0" + String(seconds)
-
+        
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "\(strMinutes):\(strSeconds)", style: UIBarButtonItemStyle.Plain, target: self, action: nil)
         
-        if(bidWindow <= 0) {
+        self.reloadSessionBids()
+
+        if(currentTime > session.objectForKey("bidWindowClose") as! NSTimeInterval) {
             timer.invalidate()
             // TODO : enter session for highest bidder
+            let finalBids : NSMutableArray = session.objectForKey("bids") as! NSMutableArray
+            var lastSessionBid : NSDictionary
+            var highestBidderID : String
+            lastSessionBid = finalBids.objectAtIndex(finalBids.count - 1) as! NSDictionary
+            highestBidderID = (lastSessionBid.objectForKey("user") as! String)
+            if(PFUser.currentUser().objectId == highestBidderID) {
+                performSegueWithIdentifier("enterStream", sender: session)
+            } else {
+                // show an alert
+                println("didn't join")
+            }
+            
         }
-        
     }
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -203,33 +229,66 @@ class ChatDetailsViewController : UIViewController, UITableViewDelegate, UITable
         
     }
     
-    func addBid(sender: AnyObject) {
-        println("add bid")
-        sessionBids = session.objectForKey("bids") as? NSMutableArray
-        if(sessionBids == nil) {
-            sessionBids = NSMutableArray()
-        }
-        
-        var lastSessionBid : NSDictionary
-        if(sessionBids.count != 0) {
-            lastSessionBid = sessionBids.objectAtIndex(sessionBids.count - 1) as! NSDictionary
-            var previousHighBid : Int! = (lastSessionBid.objectForKey("bid") as! String).toInt()
-            if( previousHighBid >= bidTextField.text.toInt()) {
-                println("bid is lower than current bid")
-                SVProgressHUD.showErrorWithStatus("Bid is lower than current bid!")
-                return
+    func reloadSessionBids() {
+
+        var sessionQuery : PFQuery = PFQuery(className: "Session")
+        sessionQuery.whereKey("objectId", equalTo: session.objectId)
+        sessionQuery.findObjectsInBackgroundWithBlock({ (NSArray array, NSError error) -> Void in
+            println(array.count)
+            if(array.count == 0) {
+                println("no objects in background")
+            } else {
+                self.sessionBids = array[0].objectForKey("bids") as? NSMutableArray
+                
+                if(!self.keyboardShowing) {
+                    self.bidTableView.reloadData()
+                }
             }
-        }
-        
-        if(bidTextField.text.rangeOfString("^[0-9]*$", options: .RegularExpressionSearch) != nil) {
-            sessionBids!.addObject(NSDictionary(objects: [PFUser.currentUser().objectId, PFUser.currentUser().objectForKey("username"), bidTextField.text, PFUser.currentUser().objectForKey("facebookId")], forKeys: ["user", "name", "bid", "fbId"]))
-            session.setObject(sessionBids, forKey: "bids")
-            session.save()
-            self.bidTableView.reloadData()
-        } else {
-            SVProgressHUD.showErrorWithStatus("Bid must be a number!")
-        }
-        
+        })
+    }
+    
+    func addBid(sender: AnyObject) {
+        SVProgressHUD.showProgress(0)
+        var sessionQuery : PFQuery = PFQuery(className: "Session")
+        sessionQuery.whereKey("objectId", equalTo: session.objectId)
+        sessionQuery.findObjectsInBackgroundWithBlock({ (NSArray array, NSError error) -> Void in
+            println(array.count)
+            if(array.count == 0) {
+                println("no current session")
+            } else {
+                SVProgressHUD.showProgress(25)
+                if(self.bidTextField.text.rangeOfString("^[0-9]*$", options: .RegularExpressionSearch) != nil) {
+                    self.sessionBids = array[0].objectForKey("bids") as? NSMutableArray
+                    var lastSessionBid : NSDictionary
+                    SVProgressHUD.showProgress(50)
+                    var previousHighBid : Int! = 0
+                    if(self.sessionBids == nil) {
+                        self.sessionBids = NSMutableArray()
+                        
+                    } else {
+                        lastSessionBid = self.sessionBids.objectAtIndex(self.sessionBids.count - 1) as! NSDictionary
+                        previousHighBid = (lastSessionBid.objectForKey("bid") as! String).toInt()
+                    }
+                    
+                    if( previousHighBid >= self.bidTextField.text.toInt()) {
+                        println("bid is lower than current bid")
+                        SVProgressHUD.showErrorWithStatus("Bid is lower than current bid!")
+                        return
+                    } else {
+                        self.sessionBids!.addObject(NSDictionary(objects: [PFUser.currentUser().objectId, PFUser.currentUser().objectForKey("username"), self.bidTextField.text, PFUser.currentUser().objectForKey("facebookId")], forKeys: ["user", "name", "bid", "fbId"]))
+                        SVProgressHUD.showProgress(75)
+                        self.session.setObject(self.sessionBids, forKey: "bids")
+                        self.session.save()
+                        self.keyboardShowing = false
+                        self.reloadSessionBids()
+                        SVProgressHUD.showProgress(100)
+                        SVProgressHUD.showSuccessWithStatus("Successfully Added Bid")
+                    }
+                } else {
+                    SVProgressHUD.showErrorWithStatus("Bid must be a number!")
+                }
+            }
+        })
     }
     
     

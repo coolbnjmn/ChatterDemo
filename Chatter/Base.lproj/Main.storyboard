@@ -23,10 +23,6 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Gradient@3x.png" id="4IC-1y-oR0">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Be cool, we never post to Facebook." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Jn1-3b-D4i">
                                 <rect key="frame" x="21" y="501" width="279" height="21"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
@@ -82,16 +78,11 @@
                         <outlet property="backgroundView" destination="wJu-Ga-KeC" id="ZSi-dR-Y0r"/>
                         <outlet property="facebookDisclaimer" destination="Jn1-3b-D4i" id="mU8-Q1-AdQ"/>
                         <outlet property="facebookLoginButton" destination="fXv-kY-mWe" id="Bdb-FT-PM1"/>
-                        <outlet property="gradientView" destination="4IC-1y-oR0" id="cRw-6i-e2P"/>
                         <outlet property="logo" destination="IOJ-yE-dDb" id="PI8-Sb-sh8"/>
                         <outlet property="tagLine" destination="qr9-Xl-l1K" id="ta6-dt-LPp"/>
                         <segue destination="BMc-Nu-aez" kind="custom" identifier="login" customClass="LoginSegue" customModule="chatter" id="NbL-Ww-bGK"/>
                     </connections>
                 </viewController>
-                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ChatterBG@3x.jpg" id="JE4-wo-Wen">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                </imageView>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Qdk-J1-0nS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-306" y="-600"/>
@@ -251,7 +242,7 @@
                     <navigationItem key="navigationItem" id="jDU-jl-cKx"/>
                     <connections>
                         <outlet property="bidTableView" destination="ZdU-yv-1D7" id="SdA-Ip-Q3Y"/>
-                        <segue destination="d73-JW-7V1" kind="custom" identifier="enterStream" customClass="ChatEntrySegue" id="ZFb-UW-chl"/>
+                        <segue destination="d73-JW-7V1" kind="custom" identifier="enterStream" customClass="ChatEntrySegue" customModule="chatter" id="aF5-yf-tDi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Uys-TY-5xK" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -274,9 +265,9 @@
                                 </connections>
                             </containerView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="fBQ-3b-vJO">
-                                <rect key="frame" x="80" y="439" width="224" height="56"/>
+                                <rect key="frame" x="16" y="439" width="288" height="56"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <color key="backgroundColor" red="1" green="0.0" blue="0.33920950280000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.29411764705882354" green="0.75686274509803919" blue="0.82352941176470584" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="Open a New Chat">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -290,36 +281,12 @@
                                     <action selector="startNewChat:" destination="4FU-VO-nKk" eventType="touchUpInside" id="FeJ-Ls-fFN"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="RKr-9D-1o5">
-                                <rect key="frame" x="16" y="439" width="56" height="56"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <color key="backgroundColor" red="1" green="0.0" blue="0.33920950280000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="28"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.borderWidth">
-                                        <integer key="value" value="3"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="layer.borderColor">
-                                        <color key="value" red="0.1647058824" green="0.76078431369999999" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="openProfile:" destination="4FU-VO-nKk" eventType="touchUpInside" id="HWj-7w-ieh"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" id="rxJ-wB-cOV"/>
                     <connections>
-                        <outlet property="profileButton" destination="RKr-9D-1o5" id="hd9-hE-bGC"/>
                         <segue destination="cOv-aK-fqn" kind="push" identifier="startNewChat" id="tpD-9u-6f6"/>
                         <segue destination="ZuF-VC-Fqt" kind="push" identifier="showProfile" id="xIS-w0-adx"/>
                         <segue destination="mCf-WK-dcZ" kind="push" identifier="editProfile" id="qaH-QU-QHn"/>
@@ -382,12 +349,12 @@
                     <connections>
                         <outlet property="descriptionField" destination="Dpt-Qw-14y" id="O4W-Hc-xng"/>
                         <outlet property="titleField" destination="Dj2-Vd-AOy" id="dcp-Ki-nZT"/>
-                        <segue destination="d73-JW-7V1" kind="custom" identifier="enterStream" customClass="ChatEntrySegue" customModule="chatter" id="jk5-n6-jBi"/>
+                        <segue destination="d73-JW-7V1" kind="custom" identifier="createStream" customClass="ChatEntrySegue" customModule="chatter" id="jk5-n6-jBi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5Rb-sJ-1pM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="801" y="-613"/>
+            <point key="canvasLocation" x="968" y="-441"/>
         </scene>
         <!--Edit Profile View Controller-->
         <scene sceneID="Yii-3c-da6">
@@ -562,6 +529,7 @@
                         <segue destination="ohF-ep-JZT" kind="custom" identifier="logout" customClass="LogoutSegue" customModule="chatter" id="xhq-5l-pD4"/>
                         <segue destination="mCf-WK-dcZ" kind="push" identifier="editProfile" id="ltU-Sl-oXc"/>
                         <segue destination="ur1-mX-r6s" kind="push" identifier="cashOut" id="PII-Ii-Jad"/>
+                        <segue destination="TAT-va-NMe" kind="push" identifier="addCredits" id="0ME-7g-eWX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Al8-M2-abK" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -606,7 +574,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jkn-DY-BYw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="821" y="-1519"/>
+            <point key="canvasLocation" x="607" y="-1673"/>
         </scene>
         <!--Stripe Card View Controller-->
         <scene sceneID="Jyh-iU-ojN">
@@ -636,6 +604,49 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7e1-6E-q1X" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="923" y="-1245"/>
+        </scene>
+        <!--Add Credit Table View Controller-->
+        <scene sceneID="r7J-3J-aba">
+            <objects>
+                <tableViewController id="TAT-va-NMe" customClass="AddCreditTableViewController" customModule="chatter" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="80" sectionHeaderHeight="22" sectionFooterHeight="22" id="VVw-j6-HMe">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="addCreditCell" textLabel="Icx-yY-bJx" detailTextLabel="c41-3x-lz4" rowHeight="80" style="IBUITableViewCellStyleSubtitle" id="clH-cR-WP7">
+                                <rect key="frame" x="0.0" y="86" width="320" height="80"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="clH-cR-WP7" id="WWs-dn-Uq1">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="79"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Icx-yY-bJx">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="c41-3x-lz4">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="TAT-va-NMe" id="0fQ-NU-8oa"/>
+                            <outlet property="delegate" destination="TAT-va-NMe" id="ES2-v6-21y"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="M3u-Qo-2mK"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QCg-xa-BOW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="878" y="-877"/>
         </scene>
         <!--Stream View Controller-->
         <scene sceneID="Afr-uS-PSw">
@@ -685,7 +696,6 @@
     <resources>
         <image name="433-x.png" width="18" height="18"/>
         <image name="ChatterBG@3x.jpg" width="1490" height="2650"/>
-        <image name="Gradient@3x.png" width="1490" height="2650"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
@@ -693,8 +703,8 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="qaH-QU-QHn"/>
         <segue reference="NbL-Ww-bGK"/>
-        <segue reference="ZFb-UW-chl"/>
-        <segue reference="ltU-Sl-oXc"/>
+        <segue reference="aF5-yf-tDi"/>
     </inferredMetricsTieBreakers>
 </document>

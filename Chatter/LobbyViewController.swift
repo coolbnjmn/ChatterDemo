@@ -35,7 +35,7 @@ import CoreGraphics
 
 class LobbyViewController : UIViewController {
     
-    @IBOutlet weak var profileButton: UIButton!
+//    @IBOutlet weak var profileButton: UIButton!
     
     override func viewDidLoad() {
         
@@ -43,29 +43,31 @@ class LobbyViewController : UIViewController {
         if((defaults.objectForKey("timesLaunched") as! Int) < 2) {
             performSegueWithIdentifier("editProfile", sender: self)
         }
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named:"profile.png"), style: UIBarButtonItemStyle.Plain, target: self, action: "openProfile:")
         
-        var facebookId = PFUser.currentUser().objectForKey("facebookId") as! String
-        var imageString = "http://graph.facebook.com/" + facebookId + "/picture?type=large"
-        var url = NSURL(string: imageString)
-        SDWebImageDownloader.sharedDownloader().downloadImageWithURL(url, options: nil, progress: nil) { (image: UIImage!, data : NSData!, error: NSError!, finished : Bool) -> Void in
-            
-            if error != nil {
-                NSLog(error.description)
-            }
-            
-            if image != nil {
-               self.profileButton.setImage(image, forState: UIControlState.Normal)
-            }
-        }
         
-        var layer = CAShapeLayer()
-        layer.frame = CGRectInset(profileButton.frame, -30, 30)
-        layer.frame.origin = CGPointZero
-        layer.strokeColor = UIColor.greenColor().CGColor
-        layer.lineWidth = 2.0
-        layer.cornerRadius = layer.frame.size.height * 0.5
-        layer.backgroundColor = UIColor.purpleColor().CGColor
-        profileButton.layer.addSublayer(layer)
+//        var facebookId = PFUser.currentUser().objectForKey("facebookId") as! String
+//        var imageString = "http://graph.facebook.com/" + facebookId + "/picture?type=large"
+//        var url = NSURL(string: imageString)
+//        SDWebImageDownloader.sharedDownloader().downloadImageWithURL(url, options: nil, progress: nil) { (image: UIImage!, data : NSData!, error: NSError!, finished : Bool) -> Void in
+//            
+//            if error != nil {
+//                NSLog(error.description)
+//            }
+//            
+//            if image != nil {
+//               self.profileButton.setImage(image, forState: UIControlState.Normal)
+//            }
+//        }
+//        
+//        var layer = CAShapeLayer()
+//        layer.frame = CGRectInset(profileButton.frame, -30, 30)
+//        layer.frame.origin = CGPointZero
+//        layer.strokeColor = UIColor.greenColor().CGColor
+//        layer.lineWidth = 2.0
+//        layer.cornerRadius = layer.frame.size.height * 0.5
+//        layer.backgroundColor = UIColor.purpleColor().CGColor
+////        profileButton.layer.addSublayer(layer)
         
     }
     
@@ -74,7 +76,7 @@ class LobbyViewController : UIViewController {
     }
     
 
-    @IBAction func openProfile(sender: AnyObject) {
+    func openProfile(sender: AnyObject) {
         performSegueWithIdentifier("showProfile", sender: sender)
     }
 

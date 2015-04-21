@@ -102,6 +102,8 @@
 		64FC954C1A8EBEC5001137A5 /* LogoutSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64FC954B1A8EBEC5001137A5 /* LogoutSegue.swift */; };
 		B22176691AC49FBC00BB4401 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B22176671AC49FBC00BB4401 /* FacebookSDK.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		B221766C1AC4A05F00BB4401 /* FBAudienceNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B221766B1AC4A05F00BB4401 /* FBAudienceNetwork.framework */; };
+		B253A15C1AE3206E00EBCC19 /* profile.png in Resources */ = {isa = PBXBuildFile; fileRef = B253A15B1AE3206E00EBCC19 /* profile.png */; };
+		B253A15E1AE321BE00EBCC19 /* AddCreditTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B253A15D1AE321BE00EBCC19 /* AddCreditTableViewController.swift */; };
 		B26333531AD447F0004982C2 /* ApplePayBTN_32pt__black_logo_@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B26333521AD447F0004982C2 /* ApplePayBTN_32pt__black_logo_@3x.png */; };
 		B276A4301ADB9C9300837622 /* CashOutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B276A42F1ADB9C9300837622 /* CashOutViewController.swift */; };
 		B2C327741AD206EB008ED98B /* StripeCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C327731AD206EB008ED98B /* StripeCardViewController.swift */; };
@@ -195,6 +197,8 @@
 		9EF3A3E1ACACE7A30FDB8204 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		B22176671AC49FBC00BB4401 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		B221766B1AC4A05F00BB4401 /* FBAudienceNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBAudienceNetwork.framework; sourceTree = "<group>"; };
+		B253A15B1AE3206E00EBCC19 /* profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profile.png; sourceTree = "<group>"; };
+		B253A15D1AE321BE00EBCC19 /* AddCreditTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddCreditTableViewController.swift; sourceTree = "<group>"; };
 		B26333511AD44615004982C2 /* chatter.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = chatter.entitlements; sourceTree = "<group>"; };
 		B26333521AD447F0004982C2 /* ApplePayBTN_32pt__black_logo_@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ApplePayBTN_32pt__black_logo_@3x.png"; sourceTree = "<group>"; };
 		B276A42F1ADB9C9300837622 /* CashOutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CashOutViewController.swift; sourceTree = "<group>"; };
@@ -320,6 +324,7 @@
 				6487BB5D1A95316700BE7D32 /* Obsolete */,
 				6487BB5C1A9313C200BE7D32 /* TableCells */,
 				6458639F1A718A7E00551A0F /* AppDelegate.swift */,
+				B253A15D1AE321BE00EBCC19 /* AddCreditTableViewController.swift */,
 				6458645D1A734DBE00551A0F /* StreamViewController.swift */,
 				6487BB5E1A9531D100BE7D32 /* NewChatViewController.swift */,
 				645864671A7484D000551A0F /* ChatEntryViewController.swift */,
@@ -343,6 +348,7 @@
 		6458639D1A718A7E00551A0F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				B253A15B1AE3206E00EBCC19 /* profile.png */,
 				B26333521AD447F0004982C2 /* ApplePayBTN_32pt__black_logo_@3x.png */,
 				B2FDA1141AD1C55600F25E9E /* centeredPeople.png */,
 				647AE6EC1A8C24F1008A0418 /* Gradient@3x.png */,
@@ -559,6 +565,7 @@
 				6458646C1A76104200551A0F /* 433-x@2x.png in Resources */,
 				647AE6E71A8C21C3008A0418 /* ChatterBG@3x.jpg in Resources */,
 				6458646B1A76104200551A0F /* 433-x.png in Resources */,
+				B253A15C1AE3206E00EBCC19 /* profile.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -629,6 +636,7 @@
 				64FC95461A8D8DC7001137A5 /* PeopleViewController.swift in Sources */,
 				64FC954C1A8EBEC5001137A5 /* LogoutSegue.swift in Sources */,
 				6487BB5B1A93109A00BE7D32 /* PeopleCell.swift in Sources */,
+				B253A15E1AE321BE00EBCC19 /* AddCreditTableViewController.swift in Sources */,
 				B2C327741AD206EB008ED98B /* StripeCardViewController.swift in Sources */,
 				6487BB521A92DD9700BE7D32 /* CategoryCell.swift in Sources */,
 				647337881A9D79B700BD993D /* SessionCell.swift in Sources */,

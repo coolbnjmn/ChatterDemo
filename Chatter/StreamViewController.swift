@@ -49,6 +49,7 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
     
     var userView : UIView?
     var timer : NSTimer!
+    var bidTimer : NSTimer!
     var timeLabel : UILabel!
     
     override func prefersStatusBarHidden() -> Bool {
@@ -172,6 +173,8 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
         if error != nil {
             showAlert(error!.localizedDescription)
         }
+        println("Here")
+        println(view.frame)
         
         let viewSize = CGSizeMake(view.frame.size.width*0.25, view.frame.size.height*0.25)
         userView = tokPublisher!.view
@@ -185,7 +188,30 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
 //                                           view.frame.size.height*0.5)
         }
         
+        var startTime = NSDate.timeIntervalSinceReferenceDate()
+        var endTime = startTime.advancedBy(60) // TODO: change to 15*60
         
+        session.setObject(endTime, forKey: "bidWindowClose")
+        
+        session.saveInBackgroundWithBlock({ (success : Bool, error : NSError!) -> Void in
+            if error != nil {
+                println(error.localizedDescription)
+            }
+            
+        })
+        bidTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("updateBidTimer:"), userInfo: endTime, repeats: true)
+//
+//        println(subscriber);
+//
+        var timeLabelViewSize = CGSizeMake(view.frame.size.width*0.25, view.frame.size.height*0.25)
+        self.timeLabel = UILabel()
+        self.timeLabel.frame = CGRectMake(view.frame.size.width - timeLabelViewSize.width,view.frame.size.height - timeLabelViewSize.height,timeLabelViewSize.width, CGFloat(40))
+        
+        self.timeLabel.text = "00:00"
+        self.timeLabel.textColor = UIColor.whiteColor()
+        self.timeLabel.sizeToFit()
+        self.timeLabel.textAlignment = .Center
+        view.insertSubview(self.timeLabel, atIndex: 10)
     }
     
     func cleanupPublisher() {
@@ -275,6 +301,30 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
         println(sender.userInfo);
     }
     
+    
+    func updateBidTimer(sender: NSTimer) {
+        var currentTime = NSDate.timeIntervalSinceReferenceDate()
+        
+        //Find the difference between current time and start time.
+        var remainingTime: NSTimeInterval = (sender.userInfo as! NSTimeInterval) - currentTime
+        
+        //calculate the minutes in elapsed time.
+        let minutes = UInt8(remainingTime / 60.0)
+        remainingTime -= (NSTimeInterval(minutes) * 60)
+        
+        //calculate the seconds in elapsed time.
+        let seconds = UInt8(remainingTime)
+        remainingTime -= NSTimeInterval(seconds)
+        
+        //add the leading zero for minutes, seconds and millseconds and store them as string constants
+        let strMinutes = minutes > 9 ? String(minutes):"0" + String(minutes)
+        let strSeconds = seconds > 9 ? String(seconds):"0" + String(seconds)
+        
+        //concatenate minuets, seconds and milliseconds as assign it to the UILabel
+        self.timeLabel.text = "\(strMinutes):\(strSeconds)"
+        
+    }
+    
     func updateTime(sender: NSTimer) {
         var currentTime = NSDate.timeIntervalSinceReferenceDate()
         
@@ -303,10 +353,9 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
     func subscriberDidConnectToStream(subscriber : OTSubscriberKit){
         println("subscriber did connect to stream")
         if tokSubscriber != nil {
-//            timer = NSTimer.scheduledTimerWithTimeInterval(15, target:self, invocation: Selector("checkTime"), repeats: true);
             var startTime = NSDate.timeIntervalSinceReferenceDate()
             timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("updateTime:"), userInfo: startTime, repeats: true)
-            
+            bidTimer.invalidate()
             println(subscriber);
             let viewSize = CGSizeMake(view.frame.size.width, view.frame.size.height)
             tokSubscriber!.view.layer.cornerRadius = 7.5

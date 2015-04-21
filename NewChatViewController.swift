@@ -63,9 +63,15 @@ class NewChatViewController : UIViewController, UITextFieldDelegate, UITextViewD
             var sessionID = result["sessionID"] as! String
             NSLog(token)
             NSLog(sessionID)
-            
-            self.performSegueWithIdentifier("enterStream", sender: result)
-            
+            session.setValue(15*60, forKey: "bidWindow") // set the initial bid window
+            session.saveInBackgroundWithBlock({ (success : Bool, error : NSError!) -> Void in
+                if error != nil {
+                    NSLog(error!.description);
+                } else if success {
+                    self.performSegueWithIdentifier("createStream", sender: result);
+                    
+                }
+            })            
         }
         
     }
@@ -73,7 +79,7 @@ class NewChatViewController : UIViewController, UITextFieldDelegate, UITextViewD
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        if segue.identifier == "enterStream" {
+        if segue.identifier == "createStream" {
             var session = sender as! PFObject
             var svc = segue.destinationViewController as! StreamViewController
             
