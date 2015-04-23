@@ -21,6 +21,11 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let titleDict: NSMutableDictionary = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+        titleDict.setObject(UIFont(name: "MyriadPro-Regular", size:20)!, forKey:NSFontAttributeName)
+        self.navigationController!.navigationBar.titleTextAttributes = titleDict as [NSObject : AnyObject]
+
+        self.navigationItem.title = "Bank Information"
         // Do any additional setup after loading the view.
         var stripeQuery : PFQuery = PFQuery(className: "StripeCustomer")
         stripeQuery.whereKey("userObj", equalTo: PFUser.currentUser().objectId)
@@ -35,7 +40,7 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
                 var credits : String = PFUser.currentUser().objectForKey("credits") as! String
                 var text = "You have "
                 text += credits
-                text += " credits. Cash out now for XXX dollars"
+                text += " credits"
                 self.creditLabel.text = text
                 self.isEnteringBankInfo = false
                 if(self.routingNumberTextField != nil) {
@@ -50,11 +55,17 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
             
         })
         
-        let buttonHeight : CGFloat = 50
+        let buttonHeight : CGFloat = 60
         let buttonOffset : CGFloat = 10
-        self.cashOutButton.frame = CGRectMake(0, self.view.bounds.size.height - buttonHeight, self.view.bounds.size.width, buttonHeight)
-        self.creditLabel.frame = CGRectMake(0, self.view.bounds.size.height - buttonHeight*3 - buttonOffset, self.view.bounds.size.width, buttonHeight*2)
-        self.view.backgroundColor = UIColor.init(red: 14/255.0, green: 14/255.0, blue: 14/255.0, alpha:0.5)
+        self.cashOutButton.frame = CGRectMake(buttonOffset, self.view.bounds.size.height - buttonHeight*2, self.view.bounds.size.width - 2*buttonOffset, buttonHeight)
+        self.cashOutButton.layer.cornerRadius = 5
+        self.cashOutButton.backgroundColor = UIColor.init(red:231/255.0, green:231/255.0, blue:231/255.0, alpha:1.0)
+        self.creditLabel.frame = CGRectMake(0, self.view.bounds.size.height - buttonHeight*3 - buttonOffset, self.view.bounds.size.width, buttonHeight)
+        self.creditLabel.numberOfLines = 1
+        self.view.backgroundColor = UIColor.whiteColor()
+        
+        self.setupTextLabels()
+        
     }
 
     override func viewWillDisappear(animated: Bool) {
@@ -77,9 +88,37 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
         
     }
     
+    func setupTextLabels() {
+        println("views")
+        let topBarHeight : CGFloat = self.navigationController!.navigationBar.frame.size.height + UIApplication.sharedApplication().statusBarFrame.size.height
+        let headerView : UIView = UIView(frame: CGRectMake(0,topBarHeight,self.view.bounds.size.width, self.view.bounds.size.height / 3))
+        
+        let labelOffset : CGFloat = 30
+        let heightOffset : CGFloat = 10
+        let whatIsLabel : UILabel = UILabel(frame: CGRectMake(labelOffset,heightOffset, self.view.bounds.size.width - 2*labelOffset, 40))
+        whatIsLabel.text = "Why does Chatter need bank info?"
+        whatIsLabel.numberOfLines = 1
+        whatIsLabel.font = UIFont(name: "MyriadPro-Regular", size: 18)
+        whatIsLabel.textAlignment = .Center
+        
+        headerView.addSubview(whatIsLabel)
+        
+        let explainLabel : UILabel = UILabel(frame: CGRectMake(labelOffset, 40+heightOffset, self.view.bounds.size.width - 2*labelOffset, 60))
+        explainLabel.text = "Chatter converts credits to $$$\n100 Credits = $5\nMinimum cashout = 100 credits"
+        explainLabel.numberOfLines = 0
+        explainLabel.textColor = UIColor.grayColor()
+        explainLabel.font = UIFont(name: "MyriadPro-Regular", size: 16)
+        explainLabel.textAlignment = .Center
+        
+        headerView.addSubview(explainLabel)
+        headerView.backgroundColor = UIColor.whiteColor()
+        self.view.addSubview(headerView)
+        
+    }
+    
     func setupBankInfoViews() {
         println("bank info")
-        self.creditLabel.text = "Please enter your banking information to cash out."
+        self.creditLabel.text = "Enter information to cash out"
         self.cashOutButton.setTitle("Add Bank Account", forState: UIControlState.allZeros)
         let textFieldWidth : CGFloat = self.view.bounds.size.width * 0.8
         let textFieldHeight : CGFloat = 60
@@ -94,8 +133,8 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
         
         routingNumberTextField.font = UIFont(name: "MyriadPro-Regular", size: 32)
         accountNumberTextField.font = UIFont(name: "MyriadPro-Regular", size: 32)
-        routingNumberTextField.textColor = UIColor.whiteColor()
-        accountNumberTextField.textColor = UIColor.whiteColor()
+        routingNumberTextField.textColor = UIColor.init(red:5/255.0, green:5/255.0, blue:5/255.0, alpha:1.0)
+        accountNumberTextField.textColor = UIColor.init(red:5/255.0, green:5/255.0, blue:5/255.0, alpha:1.0)
         routingNumberTextField.borderStyle = .RoundedRect
         accountNumberTextField.borderStyle = .RoundedRect
         
@@ -106,9 +145,9 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
         routingNumberTextField.tag = 1
         accountNumberTextField.tag = 2
         
-        routingNumberTextField.backgroundColor = UIColor.init(red: 120/255.0, green: 120/255.0, blue: 120/255.0, alpha: 1.0)
-        accountNumberTextField.backgroundColor = UIColor.init(red: 120/255.0, green: 120/255.0, blue: 120/255.0, alpha: 1.0)
-
+        routingNumberTextField.backgroundColor = UIColor.init(red:215/255.0, green:215/255.0, blue:215/255.0, alpha:1.0)
+        accountNumberTextField.backgroundColor = UIColor.init(red:215/255.0, green:215/255.0, blue:215/255.0, alpha:1.0)
+        
         
         self.view.addSubview(accountNumberTextField)
         self.view.addSubview(routingNumberTextField)
@@ -200,6 +239,25 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
    
         } else {
             println("cash out pressed")
+            // need to credit the account
+            var credits : String = PFUser.currentUser().objectForKey("credits") as! String
+            SVProgressHUD.showProgress(20, status: "Cash out pressed")
+            let params = NSMutableDictionary()
+            params.setValue(credits, forKey: "credits")
+            params.setValue(PFUser.currentUser().objectId, forKey: "userObjectId")
+            let block : (AnyObject!, NSError!) -> Void = {
+                (results: AnyObject!, error: NSError!) in
+                SVProgressHUD.showProgress(80, status: "Server responded.")
+                if(error == nil) {
+                    SVProgressHUD.showSuccessWithStatus("Success!")
+                } else {
+                    println(error)
+                    SVProgressHUD.showErrorWithStatus("Bank Transfer Failed")
+                }
+            }
+            
+            PFCloud.callFunctionInBackground("startTransfer", withParameters:params as [NSObject : AnyObject], block: block)
+
             
         }
     }

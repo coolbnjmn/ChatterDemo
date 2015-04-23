@@ -53,6 +53,54 @@ var createStripeCustomer = function(request, response) {
 
 }
 
+Parse.Cloud.define("startTransfer", function(request, response) {
+  var userObjectId = request.params.userObjectId;
+  var credits = request.params.credits;
+  var StripeCustomer = Parse.Object.extend("StripeCustomer");
+  var stripeCustomerQuery = new Parse.Query(StripeCustomer);
+
+  stripeCustomerQuery.equalTo("userObj", userObjectId);
+  stripeCustomerQuery.find({
+    success: function(results) {
+      if(results.length == 0) {
+        
+      } else if(results.length == 1) {
+        var customer = results[0];
+        // handle returning customer adding a new card
+        Stripe.Recipients.create({
+          name: customer.description,
+          type: "individual",
+          bank_account: customer.source,
+          email: customer.email
+        }, function(err, recipient) {
+          // recipient;
+          console.log("have a recipient");
+          if(err == nil) {
+            Stripe.transfers.create({
+            amount: credits / 20,
+            currency: "usd",
+            recipient: recipient,
+            bank_account: customer.source,
+            statement_descriptor: "Chatter Cash Out"
+            }, function(err1, transfer) {
+              // asynchronously called
+              if(err == nil) {
+                 response.success("Successfully transferred funds");
+              } else {
+                response.error(err1);
+              }
+            });
+          } else {
+          response.error(err);
+          }
+        });
+      }
+    }, error: function(error) {
+        reponse.error(error);          
+    }
+  });
+});
+
 Parse.Cloud.define("addPaymentSource", function(request, response) {
     console.log(request.params);
     var userObjectId = request.params.userObjectId;
