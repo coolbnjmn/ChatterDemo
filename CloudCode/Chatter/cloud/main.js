@@ -56,42 +56,39 @@ var createStripeCustomer = function(request, response) {
 Parse.Cloud.define("startTransfer", function(request, response) {
   var userObjectId = request.params.userObjectId;
   var credits = request.params.credits;
-  var StripeCustomer = Parse.Object.extend("StripeCustomer");
-  var stripeCustomerQuery = new Parse.Query(StripeCustomer);
+  var StripeRecipient = Parse.Object.extend("StripeRecipient");
+  var stripeRecipientQuery = new Parse.Query(StripeRecipient);
 
-  stripeCustomerQuery.equalTo("userObj", userObjectId);
-  stripeCustomerQuery.find({
+  stripeRecipientQuery.equalTo("user_id", userObjectId);
+  stripeRecipientQuery.find({
     success: function(results) {
       if(results.length == 0) {
         
       } else if(results.length == 1) {
-        var customer = results[0];
+        var recipient = results[0];
         // handle returning customer adding a new card
-        Stripe.Recipients.create({
-          name: customer.description,
-          type: "individual",
-          bank_account: customer.source,
-          email: customer.email
-        }, function(err, recipient) {
-          // recipient;
-          console.log("have a recipient");
-          if(err == nil) {
-            Stripe.transfers.create({
-            amount: credits / 20,
-            currency: "usd",
-            recipient: recipient,
-            bank_account: customer.source,
-            statement_descriptor: "Chatter Cash Out"
-            }, function(err1, transfer) {
-              // asynchronously called
-              if(err == nil) {
-                 response.success("Successfully transferred funds");
-              } else {
-                response.error(err1);
-              }
-            });
-          } else {
-          response.error(err);
+        var recipientId = recipient.get("recipient_id");
+
+        var params = [];
+        params["amount"] = 1;
+        params["currency"] = "USD";
+        params["recipient"] = recipientId;
+
+        Parse.Cloud.httpRequest({
+          method: 'POST',
+          headers:{
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer sk_test_ukk7e8B46I39nxoUd6XILpPZ'
+           },
+          url: 'https://api.stripe.com/v1/transfers',
+          params: params,
+          success: function(httpResponseInner) {
+            console.log(httpResponseInner.text);
+            response.success(httpResponseInner);
+          },
+          error: function(httpResponse) {
+            console.error('Request failed with response code ' + httpResponse.status);
+            response.error(httpResponse);
           }
         });
       }
@@ -104,74 +101,142 @@ Parse.Cloud.define("startTransfer", function(request, response) {
 Parse.Cloud.define("addPaymentSource", function(request, response) {
     console.log(request.params);
     var userObjectId = request.params.userObjectId;
-    var StripeCustomer = Parse.Object.extend("StripeCustomer");
-    var stripeCustomerQuery = new Parse.Query(StripeCustomer);
+    var StripeRecipient = Parse.Object.extend("StripeRecipient");
+    var stripeRecipientQuery = new Parse.Query(StripeRecipient);
 
-    stripeCustomerQuery.equalTo("userObj", userObjectId);
-    stripeCustomerQuery.find({
-      success: function(results) {
-        if(results.length == 0) {
-          var stripeCustomer = new StripeCustomer();
-          stripeCustomer.set("tokenId", request.params.token);
-          stripeCustomer.set("userObj",request.params.userObjectId);
+    stripeRecipientQuery.equalTo("userObj", userObjectId);
+    stripeRecipientQuery.find({
+      success: function(stripeRecipients) {
+        if(stripeRecipients.length == 0) {
+          // create a new 
+          var recipientParams = [];
+          recipientParams["name"] = Parse.User.current().get("first_name") + ' ' + Parse.User.current().get("last_name");
+          recipientParams["type"] = "individual";
+          recipientParams["email"] = Parse.User.current().get("email");
+          recipientParams["bank_account"] = request.params.token;
 
-          var newStripeCustomer = {};
-          newStripeCustomer.source = request.params.token;
-          newStripeCustomer.email = Parse.User.current().get("email");
-          newStripeCustomer.description = request.params.userObjectId;
-          console.log(newStripeCustomer);
-          Stripe.Customers.create(newStripeCustomer, {
-                success: function(httpResponse) {
-                  console.log(httpResponse);
-                  stripeCustomer.set("stripeCustomerId", httpResponse.id);
-                  stripeCustomer.save(null,{
-                    success: function(customer) {
-                      console.log(customer.id)
-                      response.success("created new customer");
-                    }, error : function(customer, error) {
-                      console.log(error);
-                      response.error(error);
-                    } 
-                  });
-                },
-                error: function(httpResponse) {
-                  console.log("error");
-                  response.error(httpResponse.message);
-                } 
+          Parse.Cloud.httpRequest({
+            method: 'POST',
+            headers:{
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer sk_test_ukk7e8B46I39nxoUd6XILpPZ'
+             },
+            url: 'https://api.stripe.com/v1/recipients',
+            params: recipientParams,
+            success: function(httpResponse) {
+              var recipient = new StripeRecipient();
+              recipient.set("user_id", Parse.User.current().id);
+              console.log(httpResponse.data.id);
+              recipient.set("recipient_id", httpResponse.data.id);
+              recipient.save();
+              response.success(httpResponse);
+            }, error: function(httpError) {
+              response.error(httpError);
             }
-          );        
-        } else if(results.length == 1) {
-          // handle returning customer adding a new card
-          var stripeCustomerFromQuery = results[0];
-          var customerId = stripeCustomerFromQuery.get("stripeCustomerId");
-          Stripe.Customers.retrieve(
-            customerId, {
-              success: function(customer) {
-                // add the card to this customer
-                Stripe.Customers.update(
-                  customerId, 
-                  {source:request.params.token}, {
-                    success: function(card) {
-                      console.log(card);
-                      response.success("Added card to existing Customer");
-                    }, error: function(card, error) {
-                      response.error(error);
-                    }
-                  }
-                );
-              }, error: function(customer, error) {
-                console.log(error);
-                response.error(error);
-              }
-            
           });
         } else {
-          response.error("Had too many customer IDs");
+          // update bank token on existing recipient
+          var recipientParams = [];
+
+          var stripeRecipient = stripeRecipients[0];
+          var recipientToken = stripeRecipient.get("recipientId");
+          recipientParams["bank_account"] = request.params.token;
+          Parse.Cloud.httpRequest({
+            method: 'POST',
+            headers:{
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer sk_test_ukk7e8B46I39nxoUd6XILpPZ'
+            },
+            url: 'https://api.stripe.com/v1/recipients' + recipientToken,
+            params: recipientParams,
+            success: function(httpResponse) {
+              stripeRecipient.set("tokenId", request.params.token);
+              stripeRecipient.save();
+              response.success(httpResponse);
+            }, 
+            error: function(httpError) {
+              response.error(httpError);
+            }  
+          }); 
+          
+          /*
+          curl https://api.stripe.com/v1/recipients/rp_15vLk9ILYnWqURNKINc44bWp \
+   -u sk_test_ukk7e8B46I39nxoUd6XILpPZ: \
+   -d description="Recipient for test@example.com"
+   */
         }
-      }, error: function(error) {
-          reponse.error(error);          
+      }, error: function(stripeRecipientError) {
+        response.error(stripeRecipientError);
       }
     });
+    // var StripeCustomer = Parse.Object.extend("StripeCustomer");
+    // var stripeCustomerQuery = new Parse.Query(StripeCustomer);
+
+    // stripeCustomerQuery.equalTo("userObj", userObjectId);
+    // stripeCustomerQuery.find({
+    //   success: function(results) {
+    //     if(results.length == 0) {
+    //       var stripeCustomer = new StripeCustomer();
+    //       stripeCustomer.set("tokenId", request.params.token);
+    //       stripeCustomer.set("userObj",request.params.userObjectId);
+
+    //       var newStripeCustomer = {};
+    //       newStripeCustomer.source = request.params.token;
+    //       newStripeCustomer.email = Parse.User.current().get("email");
+    //       newStripeCustomer.description = request.params.userObjectId;
+    //       console.log(newStripeCustomer);
+    //       Stripe.Customers.create(newStripeCustomer, {
+    //             success: function(httpResponse) {
+    //               console.log(httpResponse);
+    //               stripeCustomer.set("stripeCustomerId", httpResponse.id);
+    //               stripeCustomer.save(null,{
+    //                 success: function(customer) {
+    //                   console.log(customer.id)
+    //                   response.success("created new customer");
+    //                 }, error : function(customer, error) {
+    //                   console.log(error);
+    //                   response.error(error);
+    //                 } 
+    //               });
+    //             },
+    //             error: function(httpResponse) {
+    //               console.log("error");
+    //               response.error(httpResponse.message);
+    //             } 
+    //         }
+    //       );        
+    //     } else if(results.length == 1) {
+    //       // handle returning customer adding a new card
+    //       var stripeCustomerFromQuery = results[0];
+    //       var customerId = stripeCustomerFromQuery.get("stripeCustomerId");
+    //       Stripe.Customers.retrieve(
+    //         customerId, {
+    //           success: function(customer) {
+    //             // add the card to this customer
+    //             Stripe.Customers.update(
+    //               customerId, 
+    //               {source:request.params.token}, {
+    //                 success: function(card) {
+    //                   console.log(card);
+    //                   response.success("Added card to existing Customer");
+    //                 }, error: function(card, error) {
+    //                   response.error(error);
+    //                 }
+    //               }
+    //             );
+    //           }, error: function(customer, error) {
+    //             console.log(error);
+    //             response.error(error);
+    //           }
+            
+    //       });
+    //     } else {
+    //       response.error("Had too many customer IDs");
+    //     }
+    //   }, error: function(error) {
+    //       reponse.error(error);          
+    //   }
+    // });
 
    
 
