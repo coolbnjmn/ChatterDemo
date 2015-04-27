@@ -2,7 +2,6 @@
 //  VerifyPhoneCodeViewController.swift
 //  Chatter
 //
-//  Created by Benjamin Hendricks on 4/5/15.
 //  Copyright (c) 2015 Eddy Borja. All rights reserved.
 //
 
@@ -45,15 +44,5 @@ class VerifyPhoneCodeViewController: UIViewController {
         }
         PFCloud.callFunctionInBackground("verifyPhoneNumber", withParameters: params as [NSObject : AnyObject], block: block)
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

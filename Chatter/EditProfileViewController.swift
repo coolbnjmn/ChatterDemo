@@ -2,7 +2,6 @@
 //  EditProfileViewController.swift
 //  Chatter
 //
-//  Created by Benjamin Hendricks on 4/5/15.
 //  Copyright (c) 2015 Eddy Borja. All rights reserved.
 //
 
@@ -18,9 +17,6 @@ class EditProfileViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         var saveEditsButton : UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Save, target: self, action: "saveEdits:")
         self.navigationItem.rightBarButtonItem = saveEditsButton
         
@@ -31,7 +27,6 @@ class EditProfileViewController: UITableViewController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
     // MARK: - Table view data source
@@ -68,6 +63,14 @@ class EditProfileViewController: UITableViewController {
         self.tableView.deselectRowAtIndexPath(indexPath, animated:true)
     }
     
+    
+    /**
+    Save edits takes all the data in the form and saves it to parse
+    
+    :param: sender The button that is being pressed (save button)
+    
+    :returns: nothing, but saves the user in the background and sends a phone verification code if the phone number changes
+    */
     func saveEdits(sender: AnyObject) {
         
         var phoneNumber = ""
@@ -106,14 +109,6 @@ class EditProfileViewController: UITableViewController {
         }
         PFUser.currentUser().saveInBackgroundWithBlock(nil)
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-    }
-    */
+    
 
 }

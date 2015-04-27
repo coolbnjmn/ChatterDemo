@@ -2,7 +2,6 @@
 //  CashOutViewController.swift
 //  Chatter
 //
-//  Created by Benjamin Hendricks on 4/12/15.
 //  Copyright (c) 2015 Eddy Borja. All rights reserved.
 //
 
@@ -27,8 +26,8 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
 
         self.navigationItem.title = "Bank Information"
         // Do any additional setup after loading the view.
-        var stripeQuery : PFQuery = PFQuery(className: "StripeCustomer")
-        stripeQuery.whereKey("userObj", equalTo: PFUser.currentUser().objectId)
+        var stripeQuery : PFQuery = PFQuery(className: "StripeRecipient")
+        stripeQuery.whereKey("user_id", equalTo: PFUser.currentUser().objectId)
 
         stripeQuery.findObjectsInBackgroundWithBlock({ (NSArray array, NSError error) -> Void in
             println(array.count)
@@ -88,8 +87,10 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
         
     }
     
+    /**
+    Method that simply sets up the text views at the top of the screen. Called in view did load.
+    */
     func setupTextLabels() {
-        println("views")
         let topBarHeight : CGFloat = self.navigationController!.navigationBar.frame.size.height + UIApplication.sharedApplication().statusBarFrame.size.height
         let headerView : UIView = UIView(frame: CGRectMake(0,topBarHeight,self.view.bounds.size.width, self.view.bounds.size.height / 3))
         
@@ -116,8 +117,10 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
         
     }
     
+    /**
+    Method that sets up the bank account information entry views only if needed.
+    */
     func setupBankInfoViews() {
-        println("bank info")
         self.creditLabel.text = "Enter information to cash out"
         self.cashOutButton.setTitle("Add Bank Account", forState: UIControlState.allZeros)
         let textFieldWidth : CGFloat = self.view.bounds.size.width * 0.8
@@ -154,6 +157,10 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
 
     }
 
+    
+    /** 
+    Method that handles the cashing out OR adding bank account behavior of the bottom button
+    */
     @IBAction func cashOutButtonPressed(sender: AnyObject) {
         if(self.isEnteringBankInfo && routingNumberTextField != nil && accountNumberTextField != nil) {
             if((routingNumberTextField.text.rangeOfString("^[0-9]{9,9}$", options: .RegularExpressionSearch)) != nil && (accountNumberTextField.text.rangeOfString("^[0-9]{12,12}$", options: .RegularExpressionSearch)) != nil) {
@@ -163,29 +170,22 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
                 let completion : STPCompletionBlock = { [weak self] (token: STPToken!, error: NSError!) in
                     let wSelf = self
                     
-                    println("#######")
                     if(error == nil) {
                         // call cloud function
-                        println(token)
                         let params = NSMutableDictionary()
                         params.setValue(token.tokenId, forKey: "token")
                         params.setValue(PFUser.currentUser().objectId, forKey: "userObjectId")
                         let block : (AnyObject!, NSError!) -> Void = {
                             (results: AnyObject!, error: NSError!) in
-                            println("********")
                             if(error == nil) {
-                                println(results)
                                 SVProgressHUD.showSuccessWithStatus("Success!")
                                 wSelf?.viewDidLoad()
                             } else {
-                                println(error)
                             }
-                            println("********")
                         }
                         PFCloud.callFunctionInBackground("addPaymentSource", withParameters:params as [NSObject : AnyObject], block: block)
                         
                     } else {
-                        print(error)
                         let alert = UIAlertView()
                         alert.title = "Invalid Bank Account Info"
                         alert.message = "Please try again."
@@ -193,7 +193,6 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
                         alert.show()
                         SVProgressHUD.dismiss()
                     }
-                    println("#######")
                     
                 }
                 let bankAccount = STPBankAccount()
@@ -238,7 +237,6 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
             }
    
         } else {
-            println("cash out pressed")
             // need to credit the account
             var credits : String = PFUser.currentUser().objectForKey("credits") as! String
             SVProgressHUD.showProgress(20, status: "Cash out pressed")
@@ -251,7 +249,6 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
                 if(error == nil) {
                     SVProgressHUD.showSuccessWithStatus("Success!")
                 } else {
-                    println(error)
                     SVProgressHUD.showErrorWithStatus("Bank Transfer Failed")
                 }
             }

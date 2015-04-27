@@ -22,37 +22,27 @@
  SOFTWARE.
  */
 
+// TODO: Use production openTok credentials
 var opentok = require("cloud/opentok/opentok.js").createOpenTokSDK("45198012", "4f7be1cc176b0f6a151aa33c329b1a8bdf96acbc");
 
 var Session = Parse.Object.extend("Session");
 
+// TODO: Use production twilio credentials
 var twilio = require('twilio')('ACcc39af43df9296cbcfb3826b99274678', '205db33bd7f9f9405d91f919d7e35a95')
 
 var Stripe = require('stripe');
+// TODO: Use production stripe credentials
 Stripe.initialize('sk_test_ukk7e8B46I39nxoUd6XILpPZ');
 
 
-Parse.Cloud.define("saveCardInformation", function(request, response) {
-
-    Stripe.Customers.create({
-      source: request.params.cardToken,
-    },{
-      success: function(httpResponse) {
-        response.success("Customer created!");
-        console.log(httpResponse);
-      },
-      error: function(httpResponse) {
-        response.error(httpResponse.message);
-      }
-    });
-
-});
-
-var createStripeCustomer = function(request, response) {
-  var StripeCustomer = Parse.Object.extend("StripeCustomer");
-
-}
-
+/**
+* Start a transfer using Stripe to specified recipient
+* Takes the credit amount and divides it by 20, or $5 for 100 credits. 
+*
+* @param {string} request.params.credits The amount of credits to be transferred
+* @param {string} request.params.userObjectId The user's recipient account to send the money to
+* @return {HTTPResponse} either returns an http error or the success dictionary sent by Stripe
+*/
 Parse.Cloud.define("startTransfer", function(request, response) {
   var userObjectId = request.params.userObjectId;
   var credits = request.params.credits;
@@ -70,7 +60,7 @@ Parse.Cloud.define("startTransfer", function(request, response) {
         var recipientId = recipient.get("recipient_id");
 
         var params = [];
-        params["amount"] = 1;
+        params["amount"] = credits/20;
         params["currency"] = "USD";
         params["recipient"] = recipientId;
 
@@ -78,7 +68,7 @@ Parse.Cloud.define("startTransfer", function(request, response) {
           method: 'POST',
           headers:{
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer sk_test_ukk7e8B46I39nxoUd6XILpPZ'
+            'Authorization': 'Bearer sk_test_ukk7e8B46I39nxoUd6XILpPZ' // TODO : Use production stripe credentials
            },
           url: 'https://api.stripe.com/v1/transfers',
           params: params,
@@ -98,6 +88,13 @@ Parse.Cloud.define("startTransfer", function(request, response) {
   });
 });
 
+/**
+* Add a bank account to the user object
+* Two main cases: (1) recipient doesn't exist (2) update existing recipient
+*
+* @param {string} request.params.userObjectId The user's recipient account to send the money to
+* @return {HTTPResponse} either returns an http error or the success dictionary sent by Stripe
+*/
 Parse.Cloud.define("addPaymentSource", function(request, response) {
     console.log(request.params);
     var userObjectId = request.params.userObjectId;
@@ -119,7 +116,7 @@ Parse.Cloud.define("addPaymentSource", function(request, response) {
             method: 'POST',
             headers:{
               'Content-Type': 'application/json',
-              'Authorization': 'Bearer sk_test_ukk7e8B46I39nxoUd6XILpPZ'
+              'Authorization': 'Bearer sk_test_ukk7e8B46I39nxoUd6XILpPZ'// TODO: Use production stripe credentials
              },
             url: 'https://api.stripe.com/v1/recipients',
             params: recipientParams,
@@ -145,7 +142,7 @@ Parse.Cloud.define("addPaymentSource", function(request, response) {
             method: 'POST',
             headers:{
               'Content-Type': 'application/json',
-              'Authorization': 'Bearer sk_test_ukk7e8B46I39nxoUd6XILpPZ'
+              'Authorization': 'Bearer sk_test_ukk7e8B46I39nxoUd6XILpPZ' // TODO : Use production stripe credentials
             },
             url: 'https://api.stripe.com/v1/recipients' + recipientToken,
             params: recipientParams,
@@ -158,96 +155,27 @@ Parse.Cloud.define("addPaymentSource", function(request, response) {
               response.error(httpError);
             }  
           }); 
-          
-          /*
-          curl https://api.stripe.com/v1/recipients/rp_15vLk9ILYnWqURNKINc44bWp \
-   -u sk_test_ukk7e8B46I39nxoUd6XILpPZ: \
-   -d description="Recipient for test@example.com"
-   */
         }
       }, error: function(stripeRecipientError) {
         response.error(stripeRecipientError);
       }
     });
-    // var StripeCustomer = Parse.Object.extend("StripeCustomer");
-    // var stripeCustomerQuery = new Parse.Query(StripeCustomer);
-
-    // stripeCustomerQuery.equalTo("userObj", userObjectId);
-    // stripeCustomerQuery.find({
-    //   success: function(results) {
-    //     if(results.length == 0) {
-    //       var stripeCustomer = new StripeCustomer();
-    //       stripeCustomer.set("tokenId", request.params.token);
-    //       stripeCustomer.set("userObj",request.params.userObjectId);
-
-    //       var newStripeCustomer = {};
-    //       newStripeCustomer.source = request.params.token;
-    //       newStripeCustomer.email = Parse.User.current().get("email");
-    //       newStripeCustomer.description = request.params.userObjectId;
-    //       console.log(newStripeCustomer);
-    //       Stripe.Customers.create(newStripeCustomer, {
-    //             success: function(httpResponse) {
-    //               console.log(httpResponse);
-    //               stripeCustomer.set("stripeCustomerId", httpResponse.id);
-    //               stripeCustomer.save(null,{
-    //                 success: function(customer) {
-    //                   console.log(customer.id)
-    //                   response.success("created new customer");
-    //                 }, error : function(customer, error) {
-    //                   console.log(error);
-    //                   response.error(error);
-    //                 } 
-    //               });
-    //             },
-    //             error: function(httpResponse) {
-    //               console.log("error");
-    //               response.error(httpResponse.message);
-    //             } 
-    //         }
-    //       );        
-    //     } else if(results.length == 1) {
-    //       // handle returning customer adding a new card
-    //       var stripeCustomerFromQuery = results[0];
-    //       var customerId = stripeCustomerFromQuery.get("stripeCustomerId");
-    //       Stripe.Customers.retrieve(
-    //         customerId, {
-    //           success: function(customer) {
-    //             // add the card to this customer
-    //             Stripe.Customers.update(
-    //               customerId, 
-    //               {source:request.params.token}, {
-    //                 success: function(card) {
-    //                   console.log(card);
-    //                   response.success("Added card to existing Customer");
-    //                 }, error: function(card, error) {
-    //                   response.error(error);
-    //                 }
-    //               }
-    //             );
-    //           }, error: function(customer, error) {
-    //             console.log(error);
-    //             response.error(error);
-    //           }
-            
-    //       });
-    //     } else {
-    //       response.error("Had too many customer IDs");
-    //     }
-    //   }, error: function(error) {
-    //       reponse.error(error);          
-    //   }
-    // });
-
-   
-
 });
 
+
+/**
+* Send verification code to given phone number and store that code in the user object
+* Randomly generates a 5 digit number and sets it to the current user, and then sends the text using twilio
+*
+* @param {string} request.params.phoneNumber The user's enterred phone number to be verified
+* @return {HTTPResponse} either returns an error message or the word Success.
+*/
 Parse.Cloud.define("sendVerificationCode", function(request, response) {
     var verificationCode = Math.floor(Math.random()*999999);
     var user = Parse.User.current();
     user.set("phoneVerificationCode", verificationCode);
     user.save();
-    
+    // TODO: your twilio test number
     twilio.sendSms({
         From: "(650) 666-0785",
         To: request.params.phoneNumber,
@@ -261,6 +189,13 @@ Parse.Cloud.define("sendVerificationCode", function(request, response) {
     });
 });
 
+/**
+* Verify the given code with the user's phone number to make sure it's the right code
+*
+* @param {string} request.params.phoneVerificationCode The user's enterred verification code to be verified
+* @return {HTTPResponse} either returns an error message or the word Success.
+*/
+
 Parse.Cloud.define("verifyPhoneNumber", function(request, response) {
     var user = Parse.User.current();
     var verificationCode = user.get("phoneVerificationCode");
@@ -273,6 +208,10 @@ Parse.Cloud.define("verifyPhoneNumber", function(request, response) {
     }
 });
 
+/**
+*
+* The rest of this code is created by Eddy Borja, using the OpenTok framework and cloud module to create his code. Check OpenTok and Parse documentation.
+*/
 // Use Parse.Cloud.define to define as many cloud functions as you want.
 Parse.Cloud.define("joinSession", function(request, response) {
   var query = new Parse.Query(Session);

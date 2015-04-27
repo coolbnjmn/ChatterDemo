@@ -97,12 +97,6 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
         if occupants != nil {
             array.addObjectsFromArray(occupants! as! [AnyObject])
         }
-        /*
-        switch array.count {
-        case 0:
-            println("Joining Empty Channel")
-            fallthrough
-        case 1:*/
             println("Joining Channel")
             let deviceID = UIDevice.currentDevice().identifierForVendor.UUIDString
             array.addObject(deviceID)
@@ -114,12 +108,7 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
                 }
                 
             })
-       /* default:
-            println("Channel is Full")
-            performSegueWithIdentifier("exitStream", sender: self)
-            return;
-        }
-        */
+       
         
         if tokSession == nil {
             println("No session exists to connect with")
@@ -184,12 +173,10 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
             userView!.clipsToBounds = true
             view.insertSubview(userView!, atIndex: 0)
             userView!.frame = CGRectMake(view.frame.size.width - viewSize.width - 10, view.frame.size.height - viewSize.height - 10, viewSize.width, viewSize.height);
-//            userView!.center = CGPointMake(view.frame.size.width*0.5,
-//                                           view.frame.size.height*0.5)
         }
         
         var startTime = NSDate.timeIntervalSinceReferenceDate()
-        var endTime = startTime.advancedBy(60) // TODO: change to 15*60
+        var endTime = startTime.advancedBy(5*60) // TODO: change to 5*60
         
         session.setObject(endTime, forKey: "bidWindowClose")
         
@@ -200,9 +187,7 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
             
         })
         bidTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("updateBidTimer:"), userInfo: endTime, repeats: true)
-//
-//        println(subscriber);
-//
+
         var timeLabelViewSize = CGSizeMake(view.frame.size.width*0.25, view.frame.size.height*0.25)
         self.timeLabel = UILabel()
         self.timeLabel.frame = CGRectMake(view.frame.size.width - timeLabelViewSize.width,view.frame.size.height - timeLabelViewSize.height,timeLabelViewSize.width, CGFloat(40))
@@ -302,6 +287,13 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
     }
     
     
+    /**
+    Update Bid timer is a method that updates the actual view for the countdown timer for the bidding window on the publisher's side. It is mainly string conversion stuff
+    
+    :params: sender NSTimer that we want to reference
+    
+    :returns: no return value but sets self.timeLabel to the updated time
+    */
     func updateBidTimer(sender: NSTimer) {
         var currentTime = NSDate.timeIntervalSinceReferenceDate()
         
@@ -325,6 +317,13 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
         
     }
     
+    /**
+    Update timer is a method that updates the actual view for the countdown timer for the chat window on the publisher's side. It is mainly string conversion stuff
+    
+    :params: sender NSTimer that we want to reference
+    
+    :returns: no return value but sets self.timeLabel to the updated time
+    */
     func updateTime(sender: NSTimer) {
         var currentTime = NSDate.timeIntervalSinceReferenceDate()
         
@@ -347,6 +346,7 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
         self.timeLabel.text = "\(strMinutes):\(strSeconds)"
 
     }
+    
     //OTSubscriber delegate callbacks
     
     
@@ -354,8 +354,8 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
         println("subscriber did connect to stream")
         if tokSubscriber != nil {
             var startTime = NSDate.timeIntervalSinceReferenceDate()
-            timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("updateTime:"), userInfo: startTime, repeats: true)
             bidTimer.invalidate()
+            timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("updateTime:"), userInfo: startTime, repeats: true)
             println(subscriber);
             let viewSize = CGSizeMake(view.frame.size.width, view.frame.size.height)
             tokSubscriber!.view.layer.cornerRadius = 7.5
@@ -370,7 +370,6 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
             self.timeLabel.textColor = UIColor.whiteColor()
             self.timeLabel.sizeToFit()
             self.timeLabel.textAlignment = .Center
-//            self.timeLabel.frame.origin = CGPointMake(timeLabelViewSize.width/2 - self.timeLabel.frame.size.width/2, 40)
             view.insertSubview(tokSubscriber!.view, atIndex: 0)
             view.insertSubview(self.timeLabel, atIndex: 10)
             waitingLabel.hidden = true
@@ -445,11 +444,3 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
     }
     
 }
-
-/*
-- (void)cleanupSubscriber
-{
-[_subscriber.view removeFromSuperview];
-_subscriber = nil;
-}
-*/

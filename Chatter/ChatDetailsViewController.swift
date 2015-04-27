@@ -74,6 +74,8 @@ class ChatDetailsViewController : UIViewController, UITableViewDelegate, UITable
         
 
     }
+    
+    // MARK: - Key board inset methods, to make sure text views are in the right place
 
     func keyboardWillHide(notification: NSNotification) {
         keyboardShowing = false
@@ -111,13 +113,19 @@ class ChatDetailsViewController : UIViewController, UITableViewDelegate, UITable
     }
             
 
+    /**
+    Update time, which updates the bid window based from the publisher's timer. 
+    
+    :params: sender NSTimer that is to be sent in
+    
+    :returns: nothing, but changes the string, and enters the session for the highest bidder, and pops the view controller for the others
+    */
     func updateTime(sender: NSTimer) {
         var currentTime = NSDate.timeIntervalSinceReferenceDate()
         
         //Find the difference between current time and start time.
         var remainingTime: NSTimeInterval = (session.objectForKey("bidWindowClose") as! NSTimeInterval) - currentTime
         
-//        bidWindow = remainingTime.
         //calculate the minutes in elapsed time.
         let minutes = UInt8(remainingTime / 60.0)
         remainingTime -= (NSTimeInterval(minutes) * 60)
@@ -136,7 +144,6 @@ class ChatDetailsViewController : UIViewController, UITableViewDelegate, UITable
 
         if(currentTime > session.objectForKey("bidWindowClose") as! NSTimeInterval) {
             timer.invalidate()
-            // TODO : enter session for highest bidder
             let finalBids : NSMutableArray = session.objectForKey("bids") as! NSMutableArray
             var lastSessionBid : NSDictionary
             var highestBidderID : String
@@ -145,8 +152,7 @@ class ChatDetailsViewController : UIViewController, UITableViewDelegate, UITable
             if(PFUser.currentUser().objectId == highestBidderID) {
                 performSegueWithIdentifier("enterStream", sender: session)
             } else {
-                // show an alert
-                println("didn't join")
+                self.navigationController?.popViewControllerAnimated(true)
             }
             
         }
@@ -229,6 +235,11 @@ class ChatDetailsViewController : UIViewController, UITableViewDelegate, UITable
         
     }
     
+    /**
+    Reload session bids, called during update time every second, and upon entering a new bid to check the validity
+    
+    :returns: no return value, but reloads the table view and gets the data in the background with a PFQuery.
+    */
     func reloadSessionBids() {
 
         var sessionQuery : PFQuery = PFQuery(className: "Session")
@@ -247,6 +258,13 @@ class ChatDetailsViewController : UIViewController, UITableViewDelegate, UITable
         })
     }
     
+    /**
+    Add bid to the bid array, checking that the bid is valid
+    
+    :param: sender AnyObject which is actually the button that is pressed
+    
+    :returns: no return value, but adds the bid if possible, and tells user if bid is below current bid
+    */
     func addBid(sender: AnyObject) {
         SVProgressHUD.showProgress(0)
         var sessionQuery : PFQuery = PFQuery(className: "Session")

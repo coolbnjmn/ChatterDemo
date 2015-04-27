@@ -33,7 +33,7 @@ import UIKit
 import Parse
 import PassKit
 
-class ProfileViewController : UIViewController , SKProductsRequestDelegate, SKPaymentTransactionObserver {
+class ProfileViewController : UIViewController  {
     
     @IBOutlet weak var profilePhoto: UIImageView!
     @IBOutlet weak var coverPhoto: UIImageView!
@@ -113,7 +113,6 @@ class ProfileViewController : UIViewController , SKProductsRequestDelegate, SKPa
         profilePhoto.backgroundColor = UIColor.redColor()
         coverPhoto.addSubview(profilePhoto)
         
-        //Don't forget this line
         profilePhoto.setTranslatesAutoresizingMaskIntoConstraints(false)
         
         var constX = NSLayoutConstraint(item: profilePhoto, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: coverPhoto, attribute: NSLayoutAttribute.CenterX, multiplier: 1, constant: 0)
@@ -124,7 +123,6 @@ class ProfileViewController : UIViewController , SKProductsRequestDelegate, SKPa
         
         var constW = NSLayoutConstraint(item: profilePhoto, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 225)
         profilePhoto.addConstraint(constW)
-        //view.addConstraint(constW) also works
         
         var constH = NSLayoutConstraint(item: profilePhoto, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1, constant: 225)
         profilePhoto.addConstraint(constH)
@@ -183,27 +181,18 @@ class ProfileViewController : UIViewController , SKProductsRequestDelegate, SKPa
     }
     
     func editProfileButtonTapped(sender: AnyObject) {
-        println("edit tapped")
         performSegueWithIdentifier("editProfile", sender: self)
     }
     @IBAction func applePayButtonPressed(sender : AnyObject) {
-        // apple pay stuff here
-        println("button pressed")
         performSegueWithIdentifier("addCredits", sender: self)
-//        if (SKPaymentQueue.canMakePayments())
-//        {
-//            var productIDArray: [AnyObject!] = ["10_credits", "55_credits", "110_credits", "270_credits", "530_credits"]
-//            
-//            var productID:NSSet = NSSet(array: productIDArray)
-//            
-//            var productsRequest:SKProductsRequest = SKProductsRequest(productIdentifiers: productID as Set<NSObject>);
-//            productsRequest.delegate = self;
-//            productsRequest.start();
-//            println("Fething Products");
-//        } else {
-//            println("can not make purchases");
-//        }
     }
+    
+    /**
+    Update Credit Label
+    This method updates the credit label with the appropriate value, then sizes it, and adds it as a subview. 
+    
+    :returns: no return value, but does layout subviews.
+    */
     func updateCreditLabel() {
         var creditStringObj : AnyObject? = PFUser.currentUser().objectForKey("credits")
         var creditString : String
@@ -218,148 +207,5 @@ class ProfileViewController : UIViewController , SKProductsRequestDelegate, SKPa
         creditLabel.frame.origin = CGPointMake((self.view.bounds.size.width - creditLabel.frame.size.width)/2, coverPhoto.frame.size.height+nameLabel.frame.size.height+20)
         self.view.layoutSubviews()
     }
-    
-    func buyProduct(product: SKProduct){
-        println("Sending the Payment Request to Apple");
-        var payment = SKPayment(product: product)
-        SKPaymentQueue.defaultQueue().addPayment(payment);
-        
-    }
-    
-    func dismissIAP(sender: AnyObject!) {
-        iapView.removeFromSuperview()
-        iapButton.removeFromSuperview()
-    }
-    
-    func iapItemPressed(sender: AnyObject!) {
-        var senderButton : UIButton = sender as! UIButton
-        var tag : Int = senderButton.tag
-        buyProduct(currentValidProducts[tag] as! SKProduct)
-    }
-    
-    func isOrderedBefore(a: AnyObject, b: AnyObject) -> Bool {
-        let aA = a as! SKProduct
-        let bB = b as! SKProduct
-        let aPrice = aA.price.integerValue
-        let bPrice = bB.price.integerValue
-        if(aPrice < bPrice) {
-            return true
-        } else {
-            return false
-        }
-    }
-    
-    func productsRequest (request: SKProductsRequest, didReceiveResponse response: SKProductsResponse) {
-        println("got the request from Apple")
-        var count : Int = response.products.count
-        if (count>0) {
-            let productHeight : CGFloat = 40
-            let productOffset : CGFloat = 10
-            let floatCount : CGFloat = CGFloat(count)
-            let iapViewHeight : CGFloat = (productHeight * floatCount) + (productOffset * (floatCount+1))
-            var validProducts = response.products
-            iapView = UIView(frame: CGRectMake( (self.view.bounds.size.width - self.view.bounds.size.width/2)/2, (self.view.bounds.size.height - iapViewHeight)/2, self.view.bounds.size.width/2,iapViewHeight))
-            
-            iapView.backgroundColor = UIColor.init(red:14/255.0, green: 14/255.0, blue: 14/255.0, alpha: 1.0)
-            iapView.layer.cornerRadius = 5
-            
-            
-            validProducts.sort(isOrderedBefore)
-            currentValidProducts = validProducts
-
-            for(var i = 0; i < validProducts.count; i++) {
-                println(validProducts[i])
-                println(validProducts[i].localizedTitle)
-                var iapItemButton = UIButton(frame: CGRectMake(productOffset,CGFloat(productHeight*CGFloat(i)+productOffset*CGFloat(i+1)),self.view.bounds.size.width/2 - productOffset * 2,productHeight))
-                iapItemButton.layer.cornerRadius = 5
-                iapItemButton.backgroundColor = UIColor.init(red: 0, green: 104/255.0, blue: 174/255.0, alpha: 1.0)
-                iapItemButton.setTitle(validProducts[i].localizedTitle, forState:.Normal)
-                iapItemButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-                iapItemButton.setTitleColor(UIColor.blueColor(), forState: .Selected)
-                iapItemButton.titleLabel!.font = UIFont.init(name: "MyriadPro-Regular", size: 22)
-                iapItemButton.addTarget(self, action: "iapItemPressed:", forControlEvents: .TouchUpInside)
-                iapItemButton.tag = i
-                iapView.addSubview(iapItemButton)
-                
-            }
-            
-            iapButton = UIButton(frame: CGRectMake(0,0,self.view.bounds.size.width, self.view.bounds.size.height))
-            iapButton.backgroundColor = UIColor.clearColor()
-            self.view.addSubview(iapView)
-            self.view.insertSubview(iapButton, belowSubview: iapView)
-            
-            iapButton.addTarget(self, action: "dismissIAP:", forControlEvents: .TouchUpInside)
-            
-            
-            
-            var validProduct: SKProduct = response.products[0] as! SKProduct
-        } else {
-            println("nothing")
-        }
-    }
-    
-    
-    func request(request: SKRequest!, didFailWithError error: NSError!) {
-        println("La vaina fallo");
-    }
-    
-    func paymentQueue(queue: SKPaymentQueue!, updatedTransactions transactions: [AnyObject]!)    {
-        println("Received Payment Transaction Response from Apple");
-        
-        for transaction:AnyObject in transactions {
-            if let trans:SKPaymentTransaction = transaction as? SKPaymentTransaction{
-                switch trans.transactionState {
-                case .Purchased:
-                    println("Product Purchased");
-                    var currentCreditString: String = PFUser.currentUser().objectForKey("credits") as! String
-                    var currentCredits : Int = currentCreditString.toInt()!
-                    
-                    println(trans.payment.productIdentifier)
-                    switch trans.payment.productIdentifier {
-                        case "10_credits":
-                            currentCredits += 10
-                            break;
-                        case "55_credits":
-                            currentCredits += 55
-                            break;
-                        case "110_credits":
-                            currentCredits += 110
-                            break;
-                        case "270_credits":
-                            currentCredits += 270
-                            break;
-                        case "530_credits":
-                            currentCredits += 530
-                            break;
-                        default:
-                            println("error")
-                            break;
-                    }
-                    PFUser.currentUser().setObject(currentCredits.description, forKey: "credits")
-                    var error : NSErrorPointer = NSErrorPointer()
-                    PFUser.currentUser().save(error)
-                    if(error != nil) {
-                        /// Do error handling
-                        println("error in credit giving")
-                    }
-                    
-                    self.updateCreditLabel()
-                    SKPaymentQueue.defaultQueue().finishTransaction(transaction as! SKPaymentTransaction)
-                    break;
-                case .Failed:
-                    println("Purchased Failed");
-                    println((transaction as! SKPaymentTransaction).error)
-                    SKPaymentQueue.defaultQueue().finishTransaction(transaction as! SKPaymentTransaction)
-                    break;
-                    // case .Restored:
-                    //[self restoreTransaction:transaction];
-                default:
-                    break;
-                }
-            }
-        }
-        
-    }
-    
     
 }

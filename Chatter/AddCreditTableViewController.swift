@@ -2,7 +2,6 @@
 //  AddCreditTableViewController.swift
 //  Chatter
 //
-//  Created by Benjamin Hendricks on 4/18/15.
 //  Copyright (c) 2015 Eddy Borja. All rights reserved.
 //
 
@@ -21,11 +20,6 @@ class AddCreditTableViewController: UITableViewController, SKProductsRequestDele
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
         if (SKPaymentQueue.canMakePayments())
         {
             
@@ -121,52 +115,13 @@ class AddCreditTableViewController: UITableViewController, SKProductsRequestDele
         return headerView
     }
     
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return NO if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return NO if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-    }
-    */
+    /**
+    Buy product based on the SKProduct ID, standard method
     
+    :param: product SKProduct referencing the item to be purchased.
     
+    :returns: No return value
+    */
     func buyProduct(product: SKProduct){
         println("Sending the Payment Request to Apple");
         var payment = SKPayment(product: product)
@@ -174,6 +129,15 @@ class AddCreditTableViewController: UITableViewController, SKProductsRequestDele
         
     }
     
+    
+    /**
+    Is Ordered before just sorts an array of SKProducts based on their price. The SKProducts coming from Apple are not ordered
+    
+    :param: a AnyObject which will be cast as an SKProduct
+    :param: b AnyObject which will be cast as an SKProduct
+    
+    :returns: A boolean for the sorting algorithm to determine the sorting order
+    */
     func isOrderedBefore(a: AnyObject, b: AnyObject) -> Bool {
         let aA = a as! SKProduct
         let bB = b as! SKProduct
@@ -186,49 +150,14 @@ class AddCreditTableViewController: UITableViewController, SKProductsRequestDele
         }
     }
     
+    // MARK: - In-App-Purchases related methods
     func productsRequest (request: SKProductsRequest, didReceiveResponse response: SKProductsResponse) {
         println("got the request from Apple")
         var count : Int = response.products.count
         if (count>0) {
-//            let productHeight : CGFloat = 40
-//            let productOffset : CGFloat = 10
-//            let floatCount : CGFloat = CGFloat(count)
-//            let iapViewHeight : CGFloat = (productHeight * floatCount) + (productOffset * (floatCount+1))
             var validProducts = response.products
-//            iapView = UIView(frame: CGRectMake( (self.view.bounds.size.width - self.view.bounds.size.width/2)/2, (self.view.bounds.size.height - iapViewHeight)/2, self.view.bounds.size.width/2,iapViewHeight))
-//            
-//            iapView.backgroundColor = UIColor.init(red:14/255.0, green: 14/255.0, blue: 14/255.0, alpha: 1.0)
-//            iapView.layer.cornerRadius = 5
-//            
-//            
             validProducts.sort(isOrderedBefore)
             currentValidProducts = validProducts
-//
-//            for(var i = 0; i < validProducts.count; i++) {
-//                println(validProducts[i])
-//                println(validProducts[i].localizedTitle)
-//                var iapItemButton = UIButton(frame: CGRectMake(productOffset,CGFloat(productHeight*CGFloat(i)+productOffset*CGFloat(i+1)),self.view.bounds.size.width/2 - productOffset * 2,productHeight))
-//                iapItemButton.layer.cornerRadius = 5
-//                iapItemButton.backgroundColor = UIColor.init(red: 0, green: 104/255.0, blue: 174/255.0, alpha: 1.0)
-//                iapItemButton.setTitle(validProducts[i].localizedTitle, forState:.Normal)
-//                iapItemButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-//                iapItemButton.setTitleColor(UIColor.blueColor(), forState: .Selected)
-//                iapItemButton.titleLabel!.font = UIFont.init(name: "MyriadPro-Regular", size: 22)
-//                iapItemButton.addTarget(self, action: "iapItemPressed:", forControlEvents: .TouchUpInside)
-//                iapItemButton.tag = i
-//                iapView.addSubview(iapItemButton)
-//                
-//            }
-//            
-//            iapButton = UIButton(frame: CGRectMake(0,0,self.view.bounds.size.width, self.view.bounds.size.height))
-//            iapButton.backgroundColor = UIColor.clearColor()
-//            self.view.addSubview(iapView)
-//            self.view.insertSubview(iapButton, belowSubview: iapView)
-//            
-//            iapButton.addTarget(self, action: "dismissIAP:", forControlEvents: .TouchUpInside)
-//            
-//            
-            
             var validProduct: SKProduct = response.products[0] as! SKProduct
         } else {
             println("nothing")
@@ -298,6 +227,13 @@ class AddCreditTableViewController: UITableViewController, SKProductsRequestDele
         
     }
     
+    /**
+        Buy Button Pressed
+        
+        :param: sender The button that is sending the action
+        
+        :returns: no return value, but calls buy product if it's possible
+    */
     func buyButtonPressed(sender: AnyObject) {
         var senderButton : UIButton = sender as! UIButton
         var tag : Int = senderButton.tag

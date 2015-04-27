@@ -2,7 +2,6 @@
 //  StripeCardViewController.swift
 //  Chatter
 //
-//  Created by Benjamin Hendricks on 4/5/15.
 //  Copyright (c) 2015 Eddy Borja. All rights reserved.
 //
 
