@@ -23,7 +23,7 @@
  */
 
 // TODO: Use production openTok credentials
-var opentok = require("cloud/opentok/opentok.js").createOpenTokSDK("45198012", "4f7be1cc176b0f6a151aa33c329b1a8bdf96acbc");
+var opentok = require("cloud/opentok/opentok.js").createOpenTokSDK("45191152", "dab577a16fb5088001efc983e38795851dc16c66");
 
 var Session = Parse.Object.extend("Session");
 
