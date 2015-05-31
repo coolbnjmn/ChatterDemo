@@ -28,11 +28,11 @@ var opentok = require("cloud/opentok/opentok.js").createOpenTokSDK("45198012", "
 var Session = Parse.Object.extend("Session");
 
 // TODO: Use production twilio credentials
-var twilio = require('twilio')('ACcc39af43df9296cbcfb3826b99274678', '205db33bd7f9f9405d91f919d7e35a95')
+var twilio = require('twilio')('AC5a7843b8b6fea6f713907d97ab89b161', '52d7fbb9bad38a39d55ca80e5404c25b')
 
 var Stripe = require('stripe');
 // TODO: Use production stripe credentials
-Stripe.initialize('sk_test_ukk7e8B46I39nxoUd6XILpPZ');
+Stripe.initialize('sk_live_Q00GHfCRD5ud04gpmUAbVAFd');
 
 
 /**
@@ -177,7 +177,7 @@ Parse.Cloud.define("sendVerificationCode", function(request, response) {
     user.save();
     // TODO: your twilio test number
     twilio.sendSms({
-        From: "(650) 666-0785",
+        From: "(855) 463-9362",
         To: request.params.phoneNumber,
         Body: "Your verification code is " + verificationCode + "."
     }, function(err, responseData) { 

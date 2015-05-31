@@ -515,7 +515,7 @@
 				TargetAttributes = {
 					645863991A718A7E00551A0F = {
 						CreatedOnToolsVersion = 6.1.1;
-						DevelopmentTeam = M6Y34M2A35;
+						DevelopmentTeam = L547TPW877;
 						SystemCapabilities = {
 							com.apple.OMC = {
 								enabled = 0;
@@ -774,7 +774,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Chatter/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
@@ -787,7 +787,7 @@
 				PRODUCT_NAME = chatter;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Chatter-Bridging-Header.h";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "arm64 armv7";
 			};
 			name = Debug;
@@ -805,7 +805,7 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = Chatter/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
@@ -818,7 +818,7 @@
 				PRODUCT_NAME = chatter;
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Chatter-Bridging-Header.h";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "arm64 armv7";
 			};
 			name = Release;

@@ -52,7 +52,6 @@ class ProfileViewController : UIViewController  {
     let ApplePaySwagMerchantID = "merchant.BenjaminHendricks.Chatter"
     override func viewDidLoad() {
         
-        SKPaymentQueue.defaultQueue().addTransactionObserver(self)
         product_id = "session_time"
         var editProfileButton : UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Edit, target: self, action:"editProfileButtonTapped:")
         self.navigationItem.rightBarButtonItem = editProfileButton

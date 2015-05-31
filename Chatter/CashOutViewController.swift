@@ -29,6 +29,7 @@ class CashOutViewController: UIViewController, UITextFieldDelegate{
         var stripeQuery : PFQuery = PFQuery(className: "StripeRecipient")
         stripeQuery.whereKey("user_id", equalTo: PFUser.currentUser().objectId)
 
+        
         stripeQuery.findObjectsInBackgroundWithBlock({ (NSArray array, NSError error) -> Void in
             println(array.count)
             if(array.count == 0) {
