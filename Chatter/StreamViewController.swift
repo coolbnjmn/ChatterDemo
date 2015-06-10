@@ -40,7 +40,7 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
     
     @IBOutlet weak var waitingLabel: UILabel!
     let subscribeToSelf = false
-    let apiKey = "45198012"
+    let apiKey = "45191152"
     var session : PFObject!
     
     var tokSession : OTSession? = nil

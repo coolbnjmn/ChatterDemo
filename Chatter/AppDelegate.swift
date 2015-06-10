@@ -44,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         //TODO: Use production Parse keys
-        Parse.setApplicationId("wIIsTKzuVbqov5wrS6kEiXCoj1C2B47zgjG8wNfh", clientKey: "MJZsPH1YonccoJ4YiEWFtjw6TKYsotpxHPy7oXcb")
+        Parse.setApplicationId("x0gKd6hc2IIVu8gnIz3xzE3g92IoMoadIdbCiyHs", clientKey: "pMK8IfAkhfUNFTnQ5mRZLUak9NyKPQTCNargx9uW")
         PFFacebookUtils.initializeFacebook();
         //TODO: Use production Stripe key
         Stripe.setDefaultPublishableKey("pk_live_NGpcRhwnRC3GjfaFJh2Vs3ro")

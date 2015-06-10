@@ -123,16 +123,22 @@ class ChatDetailsViewController : UIViewController, UITableViewDelegate, UITable
     func updateTime(sender: NSTimer) {
         var currentTime = NSDate.timeIntervalSinceReferenceDate()
         
+        var remainingTime : NSTimeInterval?
         //Find the difference between current time and start time.
-        var remainingTime: NSTimeInterval = (session.objectForKey("bidWindowClose") as! NSTimeInterval) - currentTime
+        if let timeInterval : NSTimeInterval = session.objectForKey("bidWindowClose") as? NSTimeInterval {
+            remainingTime = timeInterval - currentTime;
+        }
         
+        if remainingTime == nil {
+            return;
+        }
         //calculate the minutes in elapsed time.
-        let minutes = UInt8(remainingTime / 60.0)
-        remainingTime -= (NSTimeInterval(minutes) * 60)
+        let minutes = UInt8(remainingTime! / 60.0)
+        remainingTime! -= (NSTimeInterval(minutes) * 60)
         
         //calculate the seconds in elapsed time.
-        let seconds = UInt8(remainingTime)
-        remainingTime -= NSTimeInterval(seconds)
+        let seconds = UInt8(remainingTime!)
+        remainingTime! -= NSTimeInterval(seconds)
         
         //add the leading zero for minutes, seconds and millseconds and store them as string constants
         let strMinutes = minutes > 9 ? String(minutes):"0" + String(minutes)

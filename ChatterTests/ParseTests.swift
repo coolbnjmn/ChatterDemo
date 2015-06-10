@@ -39,7 +39,7 @@ class ParseTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        Parse.setApplicationId("cOsRze6ZwOqoQYKFuCl9Qh0OS2tXdvOywHT45rDw", clientKey: "Mw16xRI3x2vPDZnr5IwewgeR8MYBTXvC4kOBLOip")
+        Parse.setApplicationId("x0gKd6hc2IIVu8gnIz3xzE3g92IoMoadIdbCiyHs", clientKey: "pMK8IfAkhfUNFTnQ5mRZLUak9NyKPQTCNargx9uW")
         
         
     }
