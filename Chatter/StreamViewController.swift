@@ -51,6 +51,7 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
     var timer : NSTimer!
     var bidTimer : NSTimer!
     var timeLabel : UILabel!
+    @IBOutlet weak var reportButton: UIButton!
     
     override func prefersStatusBarHidden() -> Bool {
         return true
@@ -284,6 +285,17 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
     }
     
     
+    @IBAction func showTools(sender: AnyObject) {
+        let alertController = UIAlertController(title: "Tools For Chat", message:
+            "Having issues?", preferredStyle: UIAlertControllerStyle.Alert)
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default,handler: nil))
+        alertController.addAction(UIAlertAction(title: "Report User", style: UIAlertActionStyle.Default, handler: { (action)  in
+            self.reportUser(self);
+        }))
+    }
+    func reportUser(sender: AnyObject) {
+        println("butotn pressed");
+    }
     /**
     Update Bid timer is a method that updates the actual view for the countdown timer for the bidding window on the publisher's side. It is mainly string conversion stuff
     
@@ -371,6 +383,7 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
             self.timeLabel.sizeToFit()
             self.timeLabel.textAlignment = .Center
             view.insertSubview(tokSubscriber!.view, atIndex: 0)
+            self.timeLabel.removeFromSuperview();
             view.insertSubview(self.timeLabel, atIndex: 10)
             waitingLabel.hidden = true
             

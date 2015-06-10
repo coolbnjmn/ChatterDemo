@@ -125,7 +125,10 @@ class ChatDetailsViewController : UIViewController, UITableViewDelegate, UITable
         
         var remainingTime : NSTimeInterval?
         //Find the difference between current time and start time.
-        session.fetchIfNeeded();
+        let block:PFObjectResultBlock = {(PFObject object, NSError error) in
+            self.session = object;
+        };
+        session.fetchIfNeededInBackgroundWithBlock(block);
         if let bidWindowClose : NSDate = session.objectForKey("endBidsDate") as? NSDate {
             remainingTime = bidWindowClose.timeIntervalSinceDate(NSDate())
         }
