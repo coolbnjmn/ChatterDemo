@@ -175,18 +175,15 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
             userView!.frame = CGRectMake(view.frame.size.width - viewSize.width - 10, view.frame.size.height - viewSize.height - 10, viewSize.width, viewSize.height);
         }
         
-        var startTime = NSDate.timeIntervalSinceReferenceDate()
-        var endTime = startTime.advancedBy(5*60) // TODO: change to 5*60
-        
-        session.setObject(endTime, forKey: "bidWindowClose")
-        
+        var endDate : NSDate = NSDate(timeInterval: NSTimeInterval(15), sinceDate: NSDate())
+        session.setObject(endDate, forKey: "endBidsDate")
         session.saveInBackgroundWithBlock({ (success : Bool, error : NSError!) -> Void in
             if error != nil {
                 println(error.localizedDescription)
             }
             
         })
-        bidTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("updateBidTimer:"), userInfo: endTime, repeats: true)
+        bidTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("updateBidTimer:"), userInfo: endDate, repeats: true)
 
         var timeLabelViewSize = CGSizeMake(view.frame.size.width*0.25, view.frame.size.height*0.25)
         self.timeLabel = UILabel()
@@ -295,11 +292,14 @@ class StreamViewController : UIViewController, OTSessionDelegate, OTPublisherKit
     :returns: no return value but sets self.timeLabel to the updated time
     */
     func updateBidTimer(sender: NSTimer) {
-        var currentTime = NSDate.timeIntervalSinceReferenceDate()
+        var currentDate = NSDate()
         
         //Find the difference between current time and start time.
-        var remainingTime: NSTimeInterval = (sender.userInfo as! NSTimeInterval) - currentTime
+        var remainingTime: NSTimeInterval = (sender.userInfo as! NSDate).timeIntervalSinceDate(currentDate)
         
+        if(remainingTime < 0) {
+            return;
+        }
         //calculate the minutes in elapsed time.
         let minutes = UInt8(remainingTime / 60.0)
         remainingTime -= (NSTimeInterval(minutes) * 60)

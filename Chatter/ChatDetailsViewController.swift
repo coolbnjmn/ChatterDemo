@@ -125,13 +125,31 @@ class ChatDetailsViewController : UIViewController, UITableViewDelegate, UITable
         
         var remainingTime : NSTimeInterval?
         //Find the difference between current time and start time.
-        if let timeInterval : NSTimeInterval = session.objectForKey("bidWindowClose") as? NSTimeInterval {
-            remainingTime = timeInterval - currentTime;
+        session.fetchIfNeeded();
+        if let bidWindowClose : NSDate = session.objectForKey("endBidsDate") as? NSDate {
+            remainingTime = bidWindowClose.timeIntervalSinceDate(NSDate())
         }
         
         if remainingTime == nil {
             return;
         }
+        
+        if (remainingTime < 0) {
+            
+            timer.invalidate()
+            let finalBids : NSMutableArray = session.objectForKey("bids") as! NSMutableArray
+            var lastSessionBid : NSDictionary
+            var highestBidderID : String
+            lastSessionBid = finalBids.objectAtIndex(finalBids.count - 1) as! NSDictionary
+            highestBidderID = (lastSessionBid.objectForKey("user") as! String)
+            if(PFUser.currentUser().objectId == highestBidderID) {
+                performSegueWithIdentifier("enterStream", sender: session)
+            } else {
+                self.navigationController?.popViewControllerAnimated(true)
+            }
+            return;
+        }
+        
         //calculate the minutes in elapsed time.
         let minutes = UInt8(remainingTime! / 60.0)
         remainingTime! -= (NSTimeInterval(minutes) * 60)
@@ -148,20 +166,6 @@ class ChatDetailsViewController : UIViewController, UITableViewDelegate, UITable
         
         self.reloadSessionBids()
 
-        if(currentTime > session.objectForKey("bidWindowClose") as! NSTimeInterval) {
-            timer.invalidate()
-            let finalBids : NSMutableArray = session.objectForKey("bids") as! NSMutableArray
-            var lastSessionBid : NSDictionary
-            var highestBidderID : String
-            lastSessionBid = finalBids.objectAtIndex(finalBids.count - 1) as! NSDictionary
-            highestBidderID = (lastSessionBid.objectForKey("user") as! String)
-            if(PFUser.currentUser().objectId == highestBidderID) {
-                performSegueWithIdentifier("enterStream", sender: session)
-            } else {
-                self.navigationController?.popViewControllerAnimated(true)
-            }
-            
-        }
     }
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

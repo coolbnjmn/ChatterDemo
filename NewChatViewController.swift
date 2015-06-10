@@ -63,7 +63,7 @@ class NewChatViewController : UIViewController, UITextFieldDelegate, UITextViewD
             var sessionID = result["sessionID"] as! String
             NSLog(token)
             NSLog(sessionID)
-            session.setValue(15*60, forKey: "bidWindow") // set the initial bid window
+            session.setValue(15, forKey: "bidWindow") // set the initial bid window // TODO: CHANGE THIS
             session.saveInBackgroundWithBlock({ (success : Bool, error : NSError!) -> Void in
                 if error != nil {
                     NSLog(error!.description);
