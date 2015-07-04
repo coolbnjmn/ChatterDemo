@@ -33,11 +33,14 @@ class VerifyPhoneCodeViewController: UIViewController {
         var params : NSMutableDictionary = NSMutableDictionary()
         params.setValue(verifyCodeTextField.text, forKey: "phoneVerificationCode")
         let block : PFIdResultBlock = { (result: AnyObject!, error: NSError!) in
+            let wSelf = self
             if(error == nil) {
                 // no error
                 var defaults = NSUserDefaults.standardUserDefaults()
                 defaults.setBool(true,  forKey:"phoneVerified")
-                self.navigationController?.popToRootViewControllerAnimated(true)
+//                self.navigationController?.popToRootViewControllerAnimated(true)
+                wSelf.performSegueWithIdentifier("acceptTerms", sender: wSelf)
+
             } else {
                 // verification code was incorrect
             }

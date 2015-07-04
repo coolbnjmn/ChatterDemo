@@ -104,6 +104,7 @@
 		B221766C1AC4A05F00BB4401 /* FBAudienceNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B221766B1AC4A05F00BB4401 /* FBAudienceNetwork.framework */; };
 		B253A15C1AE3206E00EBCC19 /* profile.png in Resources */ = {isa = PBXBuildFile; fileRef = B253A15B1AE3206E00EBCC19 /* profile.png */; };
 		B253A15E1AE321BE00EBCC19 /* AddCreditTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B253A15D1AE321BE00EBCC19 /* AddCreditTableViewController.swift */; };
+		B26310C31B47C8CD00502F09 /* AcceptTermsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26310C21B47C8CD00502F09 /* AcceptTermsViewController.swift */; };
 		B26333531AD447F0004982C2 /* ApplePayBTN_32pt__black_logo_@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B26333521AD447F0004982C2 /* ApplePayBTN_32pt__black_logo_@3x.png */; };
 		B276A4301ADB9C9300837622 /* CashOutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B276A42F1ADB9C9300837622 /* CashOutViewController.swift */; };
 		B2C327741AD206EB008ED98B /* StripeCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C327731AD206EB008ED98B /* StripeCardViewController.swift */; };
@@ -199,6 +200,7 @@
 		B221766B1AC4A05F00BB4401 /* FBAudienceNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBAudienceNetwork.framework; sourceTree = "<group>"; };
 		B253A15B1AE3206E00EBCC19 /* profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profile.png; sourceTree = "<group>"; };
 		B253A15D1AE321BE00EBCC19 /* AddCreditTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddCreditTableViewController.swift; sourceTree = "<group>"; };
+		B26310C21B47C8CD00502F09 /* AcceptTermsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AcceptTermsViewController.swift; sourceTree = "<group>"; };
 		B26333511AD44615004982C2 /* chatter.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = chatter.entitlements; sourceTree = "<group>"; };
 		B26333521AD447F0004982C2 /* ApplePayBTN_32pt__black_logo_@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ApplePayBTN_32pt__black_logo_@3x.png"; sourceTree = "<group>"; };
 		B276A42F1ADB9C9300837622 /* CashOutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CashOutViewController.swift; sourceTree = "<group>"; };
@@ -336,6 +338,7 @@
 				647337831A9D21CD00BD993D /* LobbyViewController.swift */,
 				B2F405D91AD23BB400A180AC /* EditProfileViewController.swift */,
 				B2F3B64B1AD2538B00F91DFC /* VerifyPhoneCodeViewController.swift */,
+				B26310C21B47C8CD00502F09 /* AcceptTermsViewController.swift */,
 				B276A42F1ADB9C9300837622 /* CashOutViewController.swift */,
 				645863A31A718A7E00551A0F /* Main.storyboard */,
 				645863A61A718A7E00551A0F /* Images.xcassets */,
@@ -628,6 +631,7 @@
 				647337861A9D26CE00BD993D /* ChatDetailsViewController.swift in Sources */,
 				645282111A9B1FF0007C6A08 /* ProfileViewController.swift in Sources */,
 				647AE6EF1A8D4B15008A0418 /* LoginSegue.swift in Sources */,
+				B26310C31B47C8CD00502F09 /* AcceptTermsViewController.swift in Sources */,
 				64B53F0F1AA5605200E83781 /* RootViewController.swift in Sources */,
 				B276A4301ADB9C9300837622 /* CashOutViewController.swift in Sources */,
 				645863A01A718A7E00551A0F /* AppDelegate.swift in Sources */,
